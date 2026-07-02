@@ -1,0 +1,60 @@
+name: OIDC audience matrix
+
+on:
+  workflow_dispatch:
+    inputs:
+      case_regex:
+        description: Optional JavaScript regular expression used to filter case IDs.
+        required: false
+        default: ""
+      categories:
+        description: Optional comma-separated category allow-list.
+        required: false
+        default: ""
+      modes:
+        description: "Comma-separated request modes: toolkit,urlsearchparams,raw."
+        required: false
+        default: toolkit,urlsearchparams,raw
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  audience-matrix:
+    name: ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - ubuntu-24.04
+          - macos-15
+          - windows-2025
+    steps:
+      - name: Checkout
+        # actions/checkout v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+
+      - name: Run OIDC audience matrix
+        shell: bash
+        run: |
+          node scripts/run-audience-matrix.mjs \
+            --outputDir "oidc-audience-results-${{ matrix.runner }}" \
+            --modes "${{ github.event.inputs.modes || 'toolkit,urlsearchparams,raw' }}" \
+            --caseRegex "${{ github.event.inputs.case_regex }}" \
+            --categories "${{ github.event.inputs.categories }}"
+
+      - name: Upload results
+        if: always()
+        # actions/upload-artifact v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: oidc-audience-results-${{ matrix.runner }}
+          path: oidc-audience-results-${{ matrix.runner }}
+          if-no-files-found: error

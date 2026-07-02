@@ -1,0 +1,60 @@
+name: OIDC audience single
+
+on:
+  workflow_dispatch:
+    inputs:
+      audience:
+        description: Audience value to request.
+        required: false
+        default: "https://github.com/apps/cyspbot"
+      omit_audience:
+        description: Request the default token without an audience parameter.
+        required: true
+        type: boolean
+        default: false
+      modes:
+        description: "Comma-separated request modes: toolkit,urlsearchparams,raw."
+        required: false
+        default: toolkit,urlsearchparams,raw
+
+permissions:
+  contents: read
+
+jobs:
+  single-audience:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        # actions/checkout v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+
+      - name: Probe audience
+        shell: bash
+        env:
+          AUDIENCE_INPUT: ${{ inputs.audience }}
+          OMIT_AUDIENCE: ${{ inputs.omit_audience }}
+          REQUEST_MODES: ${{ inputs.modes }}
+        run: |
+          if [[ "$OMIT_AUDIENCE" == "true" ]]; then
+            node scripts/run-audience-matrix.mjs \
+              --outputDir oidc-audience-results-single \
+              --singleAudienceNull=true \
+              --modes "$REQUEST_MODES"
+          else
+            node scripts/run-audience-matrix.mjs \
+              --outputDir oidc-audience-results-single \
+              --singleAudience "$AUDIENCE_INPUT" \
+              --modes "$REQUEST_MODES"
+          fi
+
+      - name: Upload results
+        if: always()
+        # actions/upload-artifact v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: oidc-audience-results-single
+          path: oidc-audience-results-single
+          if-no-files-found: error

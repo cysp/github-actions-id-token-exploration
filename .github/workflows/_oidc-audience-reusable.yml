@@ -1,0 +1,46 @@
+name: OIDC audience reusable
+
+on:
+  workflow_call:
+    inputs:
+      case_regex:
+        description: JavaScript regular expression used to filter case IDs.
+        required: false
+        type: string
+        default: "^(default-no-audience|owner-url|repo-url|github-app-cyspbot|azure-default|aws-default)$"
+      modes:
+        description: Comma-separated request modes.
+        required: false
+        type: string
+        default: toolkit,urlsearchparams,raw
+
+permissions:
+  contents: read
+
+jobs:
+  reusable-audience:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        # actions/checkout v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+
+      - name: Run reusable workflow audience cases
+        shell: bash
+        run: |
+          node scripts/run-audience-matrix.mjs \
+            --outputDir oidc-audience-results-reusable \
+            --caseRegex "${{ inputs.case_regex }}" \
+            --modes "${{ inputs.modes }}"
+
+      - name: Upload results
+        if: always()
+        # actions/upload-artifact v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: oidc-audience-results-reusable
+          path: oidc-audience-results-reusable
+          if-no-files-found: error

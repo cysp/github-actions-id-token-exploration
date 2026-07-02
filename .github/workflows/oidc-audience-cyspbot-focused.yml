@@ -1,0 +1,38 @@
+name: OIDC audience cyspbot focused
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  cyspbot-focused:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        # actions/checkout v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+
+      - name: Test cyspbot and adjacent audience values
+        shell: bash
+        run: |
+          node scripts/run-audience-matrix.mjs \
+            --outputDir oidc-audience-results-cyspbot-focused \
+            --caseRegex "^(github-app-cyspbot|github-app-cyspbot-trailing-slash|github-app-cyspbot-query|github-app-cyspbot-fragment|github-apps-root|github-app-path-without-scheme|plain-app-slug|api-scheme-cyspbot|urn-github-app|owner-url|repo-url|azure-default|aws-default)$" \
+            --modes toolkit,urlsearchparams,raw
+
+      - name: Upload results
+        if: always()
+        # actions/upload-artifact v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: oidc-audience-results-cyspbot-focused
+          path: oidc-audience-results-cyspbot-focused
+          if-no-files-found: error

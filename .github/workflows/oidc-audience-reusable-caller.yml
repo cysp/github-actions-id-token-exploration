@@ -1,0 +1,30 @@
+name: OIDC audience reusable caller
+
+on:
+  workflow_dispatch:
+    inputs:
+      case_regex:
+        description: Optional JavaScript regular expression used to filter case IDs.
+        required: false
+        default: "^(default-no-audience|owner-url|repo-url|github-app-cyspbot|azure-default|aws-default)$"
+      modes:
+        description: Comma-separated request modes.
+        required: false
+        default: toolkit,urlsearchparams,raw
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  call-reusable:
+    uses: ./.github/workflows/_oidc-audience-reusable.yml
+    permissions:
+      contents: read
+      id-token: write
+    with:
+      case_regex: ${{ github.event.inputs.case_regex || '^(default-no-audience|owner-url|repo-url|github-app-cyspbot|azure-default|aws-default)$' }}
+      modes: ${{ github.event.inputs.modes || 'toolkit,urlsearchparams,raw' }}

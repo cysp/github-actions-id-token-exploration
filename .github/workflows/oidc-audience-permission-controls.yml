@@ -1,0 +1,65 @@
+name: OIDC audience permission controls
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  without-id-token-write:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        # actions/checkout v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+
+      - name: Confirm OIDC request variables are absent
+        shell: bash
+        run: |
+          node scripts/run-audience-matrix.mjs \
+            --outputDir oidc-audience-results-no-id-token-write \
+            --caseRegex "^(default-no-audience|owner-url|github-app-cyspbot)$" \
+            --allowMissingEnv=true \
+            --requireNoAccepted=true
+
+      - name: Upload results
+        if: always()
+        # actions/upload-artifact v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: oidc-audience-results-no-id-token-write
+          path: oidc-audience-results-no-id-token-write
+          if-no-files-found: error
+
+  with-id-token-write:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        # actions/checkout v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+
+      - name: Confirm OIDC request variables are present
+        shell: bash
+        run: |
+          node scripts/run-audience-matrix.mjs \
+            --outputDir oidc-audience-results-with-id-token-write \
+            --caseRegex "^(default-no-audience|owner-url|github-app-cyspbot)$" \
+            --requireAnyAccepted=true
+
+      - name: Upload results
+        if: always()
+        # actions/upload-artifact v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: oidc-audience-results-with-id-token-write
+          path: oidc-audience-results-with-id-token-write
+          if-no-files-found: error

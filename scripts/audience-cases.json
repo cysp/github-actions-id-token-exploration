@@ -1,0 +1,418 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "default-no-audience",
+      "category": "control",
+      "audience": null,
+      "why": "GitHub documented default audience path."
+    },
+    {
+      "id": "empty-audience",
+      "category": "control",
+      "audience": "",
+      "why": "Boundary case for an explicitly empty audience query parameter."
+    },
+    {
+      "id": "owner-url",
+      "category": "github-owner",
+      "audience": "https://github.com/cysp",
+      "why": "Documented default-form owner URL for this repository owner."
+    },
+    {
+      "id": "owner-url-http",
+      "category": "github-owner",
+      "audience": "http://github.com/cysp",
+      "why": "HTTP variant of the documented owner URL."
+    },
+    {
+      "id": "owner-url-uppercase-host",
+      "category": "github-owner",
+      "audience": "https://GITHUB.com/cysp",
+      "why": "Host case-sensitivity check for the documented owner URL."
+    },
+    {
+      "id": "owner-url-trailing-slash",
+      "category": "github-owner",
+      "audience": "https://github.com/cysp/",
+      "why": "Trailing slash variant of the documented owner URL."
+    },
+    {
+      "id": "owner-url-query",
+      "category": "github-owner",
+      "audience": "https://github.com/cysp?tab=repositories",
+      "why": "Owner URL with query string."
+    },
+    {
+      "id": "orgs-owner-url",
+      "category": "github-owner",
+      "audience": "https://github.com/orgs/cysp",
+      "why": "Organization settings-style path for the repository owner."
+    },
+    {
+      "id": "users-owner-url",
+      "category": "github-owner",
+      "audience": "https://github.com/users/cysp",
+      "why": "User profile API-style path for the repository owner."
+    },
+    {
+      "id": "other-owner-url-chikachow",
+      "category": "github-owner",
+      "audience": "https://github.com/chikachow",
+      "why": "Different GitHub owner URL related to the cyspbot deployment environment."
+    },
+    {
+      "id": "other-owner-url-actions",
+      "category": "github-owner",
+      "audience": "https://github.com/actions",
+      "why": "Different well-known GitHub owner URL."
+    },
+    {
+      "id": "docs-example-owner-url",
+      "category": "github-owner",
+      "audience": "https://github.com/octo-org",
+      "why": "Owner URL shape from GitHub's documentation examples."
+    },
+    {
+      "id": "repo-url",
+      "category": "github-repo",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration",
+      "why": "Repository URL variant."
+    },
+    {
+      "id": "repo-url-trailing-slash",
+      "category": "github-repo",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/",
+      "why": "Repository URL with trailing slash."
+    },
+    {
+      "id": "other-cysp-repo-url",
+      "category": "github-repo",
+      "audience": "https://github.com/cysp/terraform-provider-contentful",
+      "why": "Repository URL from the observed failing workflow's repository."
+    },
+    {
+      "id": "repo-url-tree-main",
+      "category": "github-repo",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/tree/main",
+      "why": "Repository branch URL variant."
+    },
+    {
+      "id": "repo-url-git-suffix",
+      "category": "github-repo",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration.git",
+      "why": "Git clone URL path variant."
+    },
+    {
+      "id": "github-root",
+      "category": "github-url",
+      "audience": "https://github.com",
+      "why": "GitHub host without path."
+    },
+    {
+      "id": "github-root-slash",
+      "category": "github-url",
+      "audience": "https://github.com/",
+      "why": "GitHub host root URL."
+    },
+    {
+      "id": "github-apps-root",
+      "category": "github-app",
+      "audience": "https://github.com/apps",
+      "why": "GitHub Apps collection URL."
+    },
+    {
+      "id": "github-app-cyspbot",
+      "category": "github-app",
+      "audience": "https://github.com/apps/cyspbot",
+      "why": "Exact failing audience from the referenced workflow."
+    },
+    {
+      "id": "github-app-cyspbot-http",
+      "category": "github-app",
+      "audience": "http://github.com/apps/cyspbot",
+      "why": "HTTP variant of the failing GitHub App URL."
+    },
+    {
+      "id": "github-app-cyspbot-uppercase-host",
+      "category": "github-app",
+      "audience": "https://GITHUB.com/apps/cyspbot",
+      "why": "Host case-sensitivity check for the failing GitHub App URL."
+    },
+    {
+      "id": "github-app-cyspbot-trailing-slash",
+      "category": "github-app",
+      "audience": "https://github.com/apps/cyspbot/",
+      "why": "Trailing slash variant of the failing GitHub App URL."
+    },
+    {
+      "id": "github-app-cyspbot-query",
+      "category": "github-app",
+      "audience": "https://github.com/apps/cyspbot?installation_id=1",
+      "why": "GitHub App URL with query string."
+    },
+    {
+      "id": "github-app-cyspbot-fragment",
+      "category": "github-app",
+      "audience": "https://github.com/apps/cyspbot#oidc",
+      "why": "GitHub App URL with fragment."
+    },
+    {
+      "id": "github-app-cyspbot-installations",
+      "category": "github-app",
+      "audience": "https://github.com/apps/cyspbot/installations/new",
+      "why": "GitHub App installation path variant."
+    },
+    {
+      "id": "github-app-cyspbot-owner-style",
+      "category": "github-app",
+      "audience": "https://github.com/cyspbot",
+      "why": "GitHub App slug as a top-level GitHub path."
+    },
+    {
+      "id": "github-app-percent-encoded-slashes",
+      "category": "github-app",
+      "audience": "https:%2F%2Fgithub.com%2Fapps%2Fcyspbot",
+      "why": "Already percent-encoded GitHub App URL."
+    },
+    {
+      "id": "github-app-double-encoded-slashes",
+      "category": "github-app",
+      "audience": "https:%252F%252Fgithub.com%252Fapps%252Fcyspbot",
+      "why": "Double-encoded GitHub App URL."
+    },
+    {
+      "id": "github-api-app",
+      "category": "github-api",
+      "audience": "https://api.github.com/app",
+      "why": "GitHub App API URL."
+    },
+    {
+      "id": "github-api-repo",
+      "category": "github-api",
+      "audience": "https://api.github.com/repos/cysp/github-actions-id-token-exploration",
+      "why": "GitHub repository API URL."
+    },
+    {
+      "id": "github-app-path-without-scheme",
+      "category": "github-app",
+      "audience": "github.com/apps/cyspbot",
+      "why": "GitHub App path without URI scheme."
+    },
+    {
+      "id": "plain-app-slug",
+      "category": "plain",
+      "audience": "cyspbot",
+      "why": "Plain GitHub App slug."
+    },
+    {
+      "id": "plain-owner",
+      "category": "plain",
+      "audience": "cysp",
+      "why": "Plain repository owner."
+    },
+    {
+      "id": "azure-default",
+      "category": "provider-documented",
+      "audience": "api://AzureADTokenExchange",
+      "why": "Documented Azure Login default custom audience example."
+    },
+    {
+      "id": "aws-default",
+      "category": "provider-documented",
+      "audience": "sts.amazonaws.com",
+      "why": "Common AWS OIDC audience."
+    },
+    {
+      "id": "aws-url",
+      "category": "provider",
+      "audience": "https://sts.amazonaws.com",
+      "why": "URL-shaped AWS audience variant."
+    },
+    {
+      "id": "google-workload-identity",
+      "category": "provider",
+      "audience": "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
+      "why": "Google Workload Identity Provider resource-name shape."
+    },
+    {
+      "id": "sigstore",
+      "category": "provider",
+      "audience": "sigstore",
+      "why": "Short non-URL audience used by some identity integrations."
+    },
+    {
+      "id": "sigstore-url",
+      "category": "provider",
+      "audience": "https://oauth2.sigstore.dev/auth",
+      "why": "URL-shaped Sigstore audience."
+    },
+    {
+      "id": "example-https-root",
+      "category": "url-shape",
+      "audience": "https://example.com",
+      "why": "Generic HTTPS URL."
+    },
+    {
+      "id": "example-https-path",
+      "category": "url-shape",
+      "audience": "https://example.com/path/to/resource",
+      "why": "Generic HTTPS URL with path."
+    },
+    {
+      "id": "example-http-root",
+      "category": "url-shape",
+      "audience": "http://example.com",
+      "why": "Generic HTTP URL."
+    },
+    {
+      "id": "localhost-http",
+      "category": "url-shape",
+      "audience": "http://localhost:8080/token",
+      "why": "Loopback URL with port."
+    },
+    {
+      "id": "token-actions-issuer",
+      "category": "url-shape",
+      "audience": "https://token.actions.githubusercontent.com",
+      "why": "GitHub OIDC issuer URL."
+    },
+    {
+      "id": "api-scheme-cyspbot",
+      "category": "scheme-shape",
+      "audience": "api://cyspbot",
+      "why": "api URI scheme with GitHub App slug."
+    },
+    {
+      "id": "urn-github-app",
+      "category": "scheme-shape",
+      "audience": "urn:github:app:cyspbot",
+      "why": "URN-style GitHub App identifier."
+    },
+    {
+      "id": "urn-oauth-client",
+      "category": "scheme-shape",
+      "audience": "urn:ietf:params:oauth:client-id:cyspbot",
+      "why": "OAuth client-id URN shape."
+    },
+    {
+      "id": "spn-style",
+      "category": "scheme-shape",
+      "audience": "spn:cyspbot",
+      "why": "Legacy Azure service-principal-style shape."
+    },
+    {
+      "id": "single-slash",
+      "category": "character-boundary",
+      "audience": "/",
+      "why": "One slash."
+    },
+    {
+      "id": "single-colon",
+      "category": "character-boundary",
+      "audience": ":",
+      "why": "One colon."
+    },
+    {
+      "id": "single-dot",
+      "category": "character-boundary",
+      "audience": ".",
+      "why": "One dot."
+    },
+    {
+      "id": "single-star",
+      "category": "character-boundary",
+      "audience": "*",
+      "why": "One asterisk."
+    },
+    {
+      "id": "spaces",
+      "category": "character-boundary",
+      "audience": "audience with spaces",
+      "why": "Spaces."
+    },
+    {
+      "id": "leading-space",
+      "category": "character-boundary",
+      "audience": " leading-space",
+      "why": "Leading space."
+    },
+    {
+      "id": "trailing-space",
+      "category": "character-boundary",
+      "audience": "trailing-space ",
+      "why": "Trailing space."
+    },
+    {
+      "id": "tab-character",
+      "category": "character-boundary",
+      "audience": "audience\twith-tab",
+      "why": "Tab character."
+    },
+    {
+      "id": "newline-character",
+      "category": "character-boundary",
+      "audience": "audience\nwith-newline",
+      "why": "Newline character."
+    },
+    {
+      "id": "reserved-query-chars",
+      "category": "character-boundary",
+      "audience": "value?with=query&and=equals",
+      "why": "Characters that require query encoding."
+    },
+    {
+      "id": "fragment-char",
+      "category": "character-boundary",
+      "audience": "value#fragment",
+      "why": "Fragment delimiter character."
+    },
+    {
+      "id": "percent-encoded-colon",
+      "category": "character-boundary",
+      "audience": "Production%3AV1",
+      "why": "Percent-encoded colon as documented for subject context values."
+    },
+    {
+      "id": "quote-chars",
+      "category": "character-boundary",
+      "audience": "\"quoted\"",
+      "why": "Double quote characters."
+    },
+    {
+      "id": "punctuation-safe",
+      "category": "character-boundary",
+      "audience": "audience-with-dashes_underscores.dots",
+      "why": "Common safe punctuation."
+    },
+    {
+      "id": "comma-separated-audiences",
+      "category": "character-boundary",
+      "audience": "cyspbot,https://github.com/apps/cyspbot",
+      "why": "Comma-separated multi-audience-looking string."
+    },
+    {
+      "id": "space-separated-audiences",
+      "category": "character-boundary",
+      "audience": "cyspbot https://github.com/apps/cyspbot",
+      "why": "Space-separated multi-audience-looking string."
+    }
+  ],
+  "generated": [
+    {
+      "idPrefix": "length-a",
+      "category": "length-boundary",
+      "char": "a",
+      "lengths": [1, 2, 8, 32, 64, 128, 255, 256, 512, 1024, 2048],
+      "why": "Length boundary using an unreserved character."
+    },
+    {
+      "idPrefix": "length-url",
+      "category": "length-boundary",
+      "prefix": "https://example.com/",
+      "char": "a",
+      "lengths": [32, 64, 128, 255, 256, 512, 1024, 2048],
+      "why": "Length boundary using URL-shaped values."
+    }
+  ]
+}

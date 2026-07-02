@@ -1,0 +1,48 @@
+name: OIDC audience self-hosted
+
+on:
+  workflow_dispatch:
+    inputs:
+      runner_labels_json:
+        description: JSON array of labels for a registered self-hosted runner.
+        required: true
+        default: '["self-hosted"]'
+      case_regex:
+        description: Optional JavaScript regular expression used to filter case IDs.
+        required: false
+        default: "^(default-no-audience|owner-url|repo-url|github-app-cyspbot|azure-default|aws-default)$"
+      modes:
+        description: Comma-separated request modes.
+        required: false
+        default: toolkit,urlsearchparams,raw
+
+permissions:
+  contents: read
+
+jobs:
+  self-hosted-audience:
+    runs-on: ${{ fromJSON(inputs.runner_labels_json) }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        # actions/checkout v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+
+      - name: Run self-hosted audience cases
+        shell: bash
+        run: |
+          node scripts/run-audience-matrix.mjs \
+            --outputDir oidc-audience-results-self-hosted \
+            --caseRegex "${{ inputs.case_regex }}" \
+            --modes "${{ inputs.modes }}"
+
+      - name: Upload results
+        if: always()
+        # actions/upload-artifact v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: oidc-audience-results-self-hosted
+          path: oidc-audience-results-self-hosted
+          if-no-files-found: error
