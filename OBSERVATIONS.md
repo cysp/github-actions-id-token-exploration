@@ -379,12 +379,11 @@ Summary: `7` accepted, `29` rejected.
 
 This is the best model supported by the current evidence:
 
-1. For audiences that do not contain the literal substring `github.com` and do
-   not use `api.github.com` resource paths, GitHub accepts a very broad set of
-   arbitrary strings, URL forms, schemes, punctuation, whitespace, and long
-   values.
-2. If the audience contains the literal substring `github.com`, GitHub appears
-   to validate the suffix beginning at the first `github.com` occurrence.
+1. For audiences that do not contain the case-insensitive substring `github.com`,
+   GitHub accepts a very broad set of arbitrary strings, URL forms, schemes,
+   punctuation, whitespace, and long values.
+2. If the audience contains `github.com` case-insensitively, GitHub appears to
+   validate the suffix beginning at the first `github.com` occurrence.
 3. The observed accepted `github.com` suffixes are:
    - `github.com`
    - `github.com/`
@@ -406,8 +405,11 @@ This is the best model supported by the current evidence:
    - `github.com.au`
    - `github.comm`
    - `foo.github.com`
-7. `api.github.com` root is accepted, but resource paths under `api.github.com`
-   are rejected.
+7. `api.github.com` does not need a separate rule to explain the evidence. Its
+   behavior matches the `github.com` suffix rule because `api.github.com`
+   contains `github.com`.
+8. Git remote syntaxes are rejected; use HTTPS-style current owner/repository
+   forms if a GitHub repository URL audience is needed.
 
 ## Practical conclusion
 
@@ -443,3 +445,41 @@ Run 6 should test:
 - Whether `api.github.com` behavior is actually explained by the same
   `github.com` substring rule.
 - Whether common Git remote URL syntaxes are accepted or rejected.
+
+## Run 6: casing, api.github.com, and Git URL probes
+
+Commit: `a8182b1`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28631081747>
+
+Summary: `21` accepted, `39` rejected.
+
+### High-confidence observations
+
+- `github.com` matching is case-insensitive:
+  - accepted: `GITHUB.com`
+  - accepted: `GitHub.com`
+  - rejected: `GITHUB.com/apps/cyspbot`
+  - rejected: `GitHub.com/apps/cyspbot`
+  - rejected: `prefix GITHUB.com/apps/cyspbot suffix`
+- Current owner/repository path matching is case-insensitive:
+  - accepted: `https://github.com/CYSP`
+  - accepted: `https://github.com/cysp/GITHUB-ACTIONS-ID-TOKEN-EXPLORATION`
+- `api.github.com` behavior is consistent with the same suffix rule beginning at
+  the embedded `github.com` substring:
+  - accepted: `api.github.com`
+  - rejected: `api.github.com/app`
+  - accepted: `https://api.github.com/cysp`
+  - accepted: `https://api.github.com/cysp/github-actions-id-token-exploration`
+  - rejected: `https://api.github.com/apps/cyspbot`
+  - rejected: `https://api.github.com.example.com`
+  - rejected: `https://api.github.com.example.com/cysp`
+  - rejected: `https://example.com/api.github.com/app`
+- Common Git remote syntaxes were rejected:
+  - `git@github.com:cysp/github-actions-id-token-exploration.git`
+  - `ssh://git@github.com/cysp/github-actions-id-token-exploration.git`
+  - `git://github.com/cysp/github-actions-id-token-exploration.git`
+  - `git+ssh://git@github.com/cysp/github-actions-id-token-exploration.git`
+  - `git@github.com:apps/cyspbot.git`
