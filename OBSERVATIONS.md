@@ -432,3 +432,14 @@ Of these, `urn:github:app:cyspbot` is the most explicit non-URL shape, while
   repository, or whether enterprise/org settings can alter it.
 - Whether `github.com` substring handling is intentional or an implementation
   side effect.
+
+## Next probes
+
+Run 6 should test:
+
+- Whether `github.com` substring matching is case-sensitive when the value is not
+  a normal URL that a parser can lowercase.
+- Whether owner/repository path matching is case-sensitive.
+- Whether `api.github.com` behavior is actually explained by the same
+  `github.com` substring rule.
+- Whether common Git remote URL syntaxes are accepted or rejected.

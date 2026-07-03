@@ -218,6 +218,48 @@
       "why": "Bare github.com embedded in a larger string."
     },
     {
+      "id": "github-root-uppercase-no-scheme",
+      "category": "github-case",
+      "audience": "GITHUB.com",
+      "why": "Uppercase bare GitHub host without URL parsing."
+    },
+    {
+      "id": "github-root-mixedcase-no-scheme",
+      "category": "github-case",
+      "audience": "GitHub.com",
+      "why": "Mixed-case bare GitHub host without URL parsing."
+    },
+    {
+      "id": "github-app-uppercase-no-scheme",
+      "category": "github-case",
+      "audience": "GITHUB.com/apps/cyspbot",
+      "why": "Uppercase bare GitHub App path."
+    },
+    {
+      "id": "github-app-mixedcase-no-scheme",
+      "category": "github-case",
+      "audience": "GitHub.com/apps/cyspbot",
+      "why": "Mixed-case bare GitHub App path."
+    },
+    {
+      "id": "prefix-uppercase-github-app",
+      "category": "github-case",
+      "audience": "prefix GITHUB.com/apps/cyspbot suffix",
+      "why": "Uppercase GitHub App path embedded in a larger string."
+    },
+    {
+      "id": "owner-url-uppercase-owner",
+      "category": "github-case",
+      "audience": "https://github.com/CYSP",
+      "why": "Current owner URL with uppercase owner path."
+    },
+    {
+      "id": "repo-url-uppercase-repo",
+      "category": "github-case",
+      "audience": "https://github.com/cysp/GITHUB-ACTIONS-ID-TOKEN-EXPLORATION",
+      "why": "Current repository URL with uppercase repository path."
+    },
+    {
       "id": "github-root-no-scheme-query",
       "category": "github-delimiter",
       "audience": "github.com?x=1",
@@ -422,6 +464,54 @@
       "why": "GitHub repository API URL."
     },
     {
+      "id": "github-api-bare-root",
+      "category": "github-api-substring",
+      "audience": "api.github.com",
+      "why": "Bare api.github.com without scheme."
+    },
+    {
+      "id": "github-api-bare-app",
+      "category": "github-api-substring",
+      "audience": "api.github.com/app",
+      "why": "Bare api.github.com app path."
+    },
+    {
+      "id": "github-api-owner-suffix",
+      "category": "github-api-substring",
+      "audience": "https://api.github.com/cysp",
+      "why": "api.github.com with path that becomes an accepted github.com owner suffix."
+    },
+    {
+      "id": "github-api-current-repo-suffix",
+      "category": "github-api-substring",
+      "audience": "https://api.github.com/cysp/github-actions-id-token-exploration",
+      "why": "api.github.com with path that becomes an accepted github.com repository suffix."
+    },
+    {
+      "id": "github-api-apps-suffix",
+      "category": "github-api-substring",
+      "audience": "https://api.github.com/apps/cyspbot",
+      "why": "api.github.com with path that becomes a rejected github.com apps suffix."
+    },
+    {
+      "id": "api-github-com-example-root",
+      "category": "github-api-substring",
+      "audience": "https://api.github.com.example.com",
+      "why": "Host starts with api.github.com but is not api.github.com."
+    },
+    {
+      "id": "api-github-com-example-owner",
+      "category": "github-api-substring",
+      "audience": "https://api.github.com.example.com/cysp",
+      "why": "Host starts with api.github.com and path mirrors current owner."
+    },
+    {
+      "id": "api-github-com-in-path",
+      "category": "github-api-substring",
+      "audience": "https://example.com/api.github.com/app",
+      "why": "api.github.com appears in path, not host."
+    },
+    {
       "id": "github-app-path-without-scheme",
       "category": "github-app",
       "audience": "github.com/apps/cyspbot",
@@ -444,6 +534,36 @@
       "category": "github-current-owner-path",
       "audience": "https://github.com/cysp/repositories",
       "why": "Current owner repositories path."
+    },
+    {
+      "id": "git-ssh-scp-current-repo",
+      "category": "github-git-url",
+      "audience": "git@github.com:cysp/github-actions-id-token-exploration.git",
+      "why": "SCP-like SSH Git remote URL for the current repository."
+    },
+    {
+      "id": "git-ssh-url-current-repo",
+      "category": "github-git-url",
+      "audience": "ssh://git@github.com/cysp/github-actions-id-token-exploration.git",
+      "why": "ssh:// Git remote URL for the current repository."
+    },
+    {
+      "id": "git-protocol-current-repo",
+      "category": "github-git-url",
+      "audience": "git://github.com/cysp/github-actions-id-token-exploration.git",
+      "why": "git:// remote URL for the current repository."
+    },
+    {
+      "id": "git-plus-ssh-current-repo",
+      "category": "github-git-url",
+      "audience": "git+ssh://git@github.com/cysp/github-actions-id-token-exploration.git",
+      "why": "git+ssh:// remote URL for the current repository."
+    },
+    {
+      "id": "git-ssh-scp-app-path",
+      "category": "github-git-url",
+      "audience": "git@github.com:apps/cyspbot.git",
+      "why": "SCP-like SSH URL using the rejected GitHub Apps path."
     },
     {
       "id": "plain-app-slug",
