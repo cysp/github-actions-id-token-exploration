@@ -35,7 +35,7 @@ jobs:
           CASE_REGEX_INPUT: ${{ github.event.inputs.case_regex }}
           REQUEST_MODES: ${{ github.event.inputs.modes || 'toolkit,urlsearchparams,raw' }}
         run: |
-          DEFAULT_CASE_REGEX="^(unicode-latin|unicode-cjk|unicode-emoji|nul-character|carriage-return|crlf|delete-character|invalid-percent-escape|lone-percent|json-array-no-github|json-object-no-github|length-a-4096|length-a-8192|length-a-16384|length-url-4096|length-url-8192|length-url-16384)$"
+          DEFAULT_CASE_REGEX="^(multi-first-invalid-then-owner-comma|multi-first-invalid-then-repo-comma|multi-first-invalid-then-owner-space|multi-first-invalid-then-owner-query|multi-first-invalid-then-repo-fragment|multi-example-first-invalid-then-owner|multi-first-repo-path-then-invalid-path|multi-first-repo-query-then-invalid|multi-first-repo-fragment-then-invalid|multi-first-owner-newline-then-invalid|multi-first-invalid-newline-then-owner|multi-repo-prefix-with-adjacent-github|json-first-invalid-then-owner|json-first-owner-then-invalid)$"
           CASE_REGEX="${CASE_REGEX_INPUT:-$DEFAULT_CASE_REGEX}"
           node scripts/run-audience-matrix.mjs \
             --outputDir oidc-audience-results-targeted \

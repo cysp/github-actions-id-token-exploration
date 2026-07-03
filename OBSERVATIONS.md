@@ -643,3 +643,15 @@ case-insensitive `github.com` substring rule. The only rejection family observed
 so far is the GitHub-specific allowlist behavior, not a general character,
 encoding, JSON, control-character, or practical length restriction up to 16K
 characters.
+
+## Next probes
+
+Run 10 should test:
+
+- Whether the issuer validates only the first case-insensitive `github.com`
+  occurrence, or whether a later accepted `github.com` suffix can rescue an
+  earlier rejected one.
+- Whether a later rejected GitHub App URL can make an otherwise accepted current
+  repository subpath fail.
+- Whether delimiters such as comma, space, newline, query, fragment, and
+  JSON-looking punctuation change that multi-occurrence behavior.

@@ -1142,6 +1142,90 @@
       "why": "Comma list containing one accepted and one rejected GitHub URL."
     },
     {
+      "id": "multi-first-invalid-then-owner-comma",
+      "category": "github-multiple-occurrences",
+      "audience": "https://github.com/apps/cyspbot,https://github.com/cysp",
+      "why": "Rejected GitHub App URL before an accepted owner URL."
+    },
+    {
+      "id": "multi-first-invalid-then-repo-comma",
+      "category": "github-multiple-occurrences",
+      "audience": "https://github.com/apps/cyspbot,https://github.com/cysp/github-actions-id-token-exploration",
+      "why": "Rejected GitHub App URL before an accepted current repository URL."
+    },
+    {
+      "id": "multi-first-invalid-then-owner-space",
+      "category": "github-multiple-occurrences",
+      "audience": "https://github.com/apps/cyspbot https://github.com/cysp",
+      "why": "Rejected GitHub App URL before an accepted owner URL separated by a space."
+    },
+    {
+      "id": "multi-first-invalid-then-owner-query",
+      "category": "github-multiple-occurrences",
+      "audience": "https://github.com/apps/cyspbot?next=https://github.com/cysp",
+      "why": "Rejected GitHub App URL with a later accepted owner URL in query text."
+    },
+    {
+      "id": "multi-first-invalid-then-repo-fragment",
+      "category": "github-multiple-occurrences",
+      "audience": "https://github.com/apps/cyspbot#https://github.com/cysp/github-actions-id-token-exploration",
+      "why": "Rejected GitHub App URL with a later accepted repository URL in fragment text."
+    },
+    {
+      "id": "multi-example-first-invalid-then-owner",
+      "category": "github-multiple-occurrences",
+      "audience": "https://example.com/github.com/apps/cyspbot,https://github.com/cysp",
+      "why": "Non-GitHub URL whose first github.com occurrence is rejected, followed by an accepted owner URL."
+    },
+    {
+      "id": "multi-first-repo-path-then-invalid-path",
+      "category": "github-multiple-occurrences",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/path/github.com/apps/cyspbot",
+      "why": "Accepted current repository path before a later GitHub App-looking path."
+    },
+    {
+      "id": "multi-first-repo-query-then-invalid",
+      "category": "github-multiple-occurrences",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/issues?next=https://github.com/apps/cyspbot",
+      "why": "Accepted current repository subpath with a later rejected GitHub App URL in query text."
+    },
+    {
+      "id": "multi-first-repo-fragment-then-invalid",
+      "category": "github-multiple-occurrences",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/issues#https://github.com/apps/cyspbot",
+      "why": "Accepted current repository subpath with a later rejected GitHub App URL in fragment text."
+    },
+    {
+      "id": "multi-first-owner-newline-then-invalid",
+      "category": "github-multiple-occurrences",
+      "audience": "https://github.com/cysp\nhttps://github.com/apps/cyspbot",
+      "why": "Accepted owner URL before a later rejected GitHub App URL separated by a newline."
+    },
+    {
+      "id": "multi-first-invalid-newline-then-owner",
+      "category": "github-multiple-occurrences",
+      "audience": "https://github.com/apps/cyspbot\nhttps://github.com/cysp",
+      "why": "Rejected GitHub App URL before a later accepted owner URL separated by a newline."
+    },
+    {
+      "id": "multi-repo-prefix-with-adjacent-github",
+      "category": "github-multiple-occurrences",
+      "audience": "https://github.com/cysp/github-actions-id-token-explorationgithub.com/apps/cyspbot",
+      "why": "Current repository name immediately followed by another github.com occurrence without a path separator."
+    },
+    {
+      "id": "json-first-invalid-then-owner",
+      "category": "github-multiple-occurrences",
+      "audience": "[\"https://github.com/apps/cyspbot\",\"https://github.com/cysp\"]",
+      "why": "JSON-looking value with a rejected GitHub App URL before an accepted owner URL."
+    },
+    {
+      "id": "json-first-owner-then-invalid",
+      "category": "github-multiple-occurrences",
+      "audience": "[\"https://github.com/cysp\",\"https://github.com/apps/cyspbot\"]",
+      "why": "JSON-looking value with an accepted owner URL before a rejected GitHub App URL."
+    },
+    {
       "id": "unicode-latin",
       "category": "generic-character-boundary",
       "audience": "café",
