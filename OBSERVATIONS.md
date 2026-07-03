@@ -337,3 +337,98 @@ Run 5 should test:
 - Comma-separated values where one item is a valid GitHub owner/repo URL.
 - Whether comma-separated values are accepted only when every GitHub-containing
   item satisfies the allowlist.
+
+## Run 5: delimiter and comma-list probes
+
+Commit: `00ea855`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28630856826>
+
+Summary: `7` accepted, `29` rejected.
+
+### High-confidence observations
+
+- Delimiters immediately after otherwise accepted bare `github.com` suffixes are
+  rejected:
+  - `github.com?x=1`
+  - `github.com#fragment` in encoded modes
+  - `github.com:443`
+  - `github.com,cyspbot`
+  - `github.com/cysp?tab=repositories`
+  - `github.com/cysp,cyspbot`
+  - `github.com/cysp/github-actions-id-token-exploration,cyspbot`
+  - `github.com/cysp/github-actions-id-token-exploration)`
+- Raw mode again accepted the fragment case only because unencoded `#` is not
+  sent as part of the `audience` query parameter. Encoded modes are
+  authoritative for literal `#`.
+- Comma is not a general delimiter after a GitHub substring. If the first
+  `github.com` occurrence is followed by comma and more text, the value is
+  rejected.
+- A valid GitHub URL may appear after a non-GitHub prefix and comma if it is the
+  final GitHub-containing suffix:
+  - `cyspbot,https://github.com/cysp`
+  - `cyspbot,https://github.com`
+- Comma-separated values are rejected when the first `github.com` suffix includes
+  a later rejected GitHub URL:
+  - `cyspbot,https://github.com/actions`
+  - `https://github.com/cysp,https://github.com/apps/cyspbot`
+
+## Current model
+
+This is the best model supported by the current evidence:
+
+1. For audiences that do not contain the literal substring `github.com` and do
+   not use `api.github.com` resource paths, GitHub accepts a very broad set of
+   arbitrary strings, URL forms, schemes, punctuation, whitespace, and long
+   values.
+2. If the audience contains the literal substring `github.com`, GitHub appears
+   to validate the suffix beginning at the first `github.com` occurrence.
+3. The observed accepted `github.com` suffixes are:
+   - `github.com`
+   - `github.com/`
+   - `github.com/cysp`
+   - `github.com/cysp/`
+   - `github.com/cysp/github-actions-id-token-exploration`
+   - `github.com/cysp/github-actions-id-token-exploration/`
+   - paths under `github.com/cysp/github-actions-id-token-exploration/`
+4. The suffix must consume the rest of the audience, except that normal URL
+   query/fragment syntax is accepted under subpaths of the current repository.
+   Query at the repository root without a trailing slash is rejected, while
+   `...?` under a subpath and `.../?` at the root are accepted.
+5. The top-level GitHub App URL `github.com/apps/cyspbot` is outside the
+   allowlist and is rejected in every tested form.
+6. The issuer's validation is substring-oriented enough that these non-GitHub
+   hostnames are still affected when they contain `github.com`:
+   - `notgithub.com`
+   - `github.com.example.com`
+   - `github.com.au`
+   - `github.comm`
+   - `foo.github.com`
+7. `api.github.com` root is accepted, but resource paths under `api.github.com`
+   are rejected.
+
+## Practical conclusion
+
+Do not use `https://github.com/apps/cyspbot` as the OIDC audience. It is in a
+GitHub-reserved URL namespace that the issuer rejects before the token reaches
+the relying party.
+
+Supported GitHub-App-specific audience shapes observed so far include:
+
+- `cyspbot`
+- `api://cyspbot`
+- `urn:github:app:cyspbot`
+
+Of these, `urn:github:app:cyspbot` is the most explicit non-URL shape, while
+`api://cyspbot` follows a commonly accepted audience URI pattern.
+
+## Remaining questions
+
+- Whether GitHub documents or will confirm this `github.com` substring allowlist
+  behavior.
+- Whether the allowlist is exactly tied to the current repository owner and
+  repository, or whether enterprise/org settings can alter it.
+- Whether `github.com` substring handling is intentional or an implementation
+  side effect.
