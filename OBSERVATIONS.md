@@ -20,6 +20,26 @@ Can't issue ID_TOKEN for audience 'https://github.com/apps/cyspbot'
 The objective is to identify which parts of the audience value influence
 issuance and find a supported audience form for a GitHub App identity.
 
+## Public documentation reviewed
+
+- GitHub's OIDC reference says the default `aud` claim is the repository owner
+  URL and that a custom audience can be set with `core.getIDToken(audience)`:
+  <https://docs.github.com/en/actions/reference/security/oidc>
+- GitHub's cloud-provider OIDC guide says workflows can request the JWT via the
+  Actions core toolkit or by calling the URL in
+  `ACTIONS_ID_TOKEN_REQUEST_URL`:
+  <https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-cloud-providers>
+- The public OIDC discovery document lists `aud` as a supported claim but does
+  not describe custom audience syntax constraints:
+  <https://token.actions.githubusercontent.com/.well-known/openid-configuration>
+- The `@actions/core` documentation describes `audience` as an optional
+  `getIDToken()` input, but does not document a validation allowlist:
+  <https://github.com/actions/toolkit/tree/main/packages/core>
+- GitHub issue search on 2026-07-03 for the exact rejection text
+  `Can't issue ID_TOKEN for audience`, for `ID_TOKEN for audience`
+  `github.com/apps`, and for `core.getIDToken audience github.com` did not find
+  relevant reported issues.
+
 ## Run 1: broad matrix
 
 Commit: `bd1c4f7`
@@ -382,8 +402,9 @@ This is the best model supported by the current evidence:
 1. For audiences that do not contain the case-insensitive substring `github.com`,
    GitHub accepts a very broad set of arbitrary strings, URL forms, schemes,
    punctuation, whitespace, control characters, Unicode, and long values.
-2. If the audience contains `github.com` case-insensitively, GitHub appears to
-   validate the suffix beginning at the first `github.com` occurrence.
+2. If the audience contains `github.com` case-insensitively, GitHub validates
+   the suffix beginning at the first `github.com` occurrence. Later valid
+   GitHub URL text does not rescue an earlier rejected suffix.
 3. The observed accepted `github.com` suffixes are:
    - `github.com`
    - `github.com/`
@@ -412,7 +433,9 @@ This is the best model supported by the current evidence:
    forms if a GitHub repository URL audience is needed.
 9. The issuer appears to apply prefix-style string matching to paths below the
    current repository. It does not normalize `..` segments out of accepted
-   repository subpaths before issuance.
+   repository subpaths before issuance, and it does not scan later
+   `github.com/apps/...` text once the first `github.com` suffix is under an
+   accepted current-repository subpath.
 10. Treat `toolkit` and `urlsearchparams` as authoritative for literal audience
    values containing `%` or `#`. The `raw` mode is useful only to distinguish URL
    transport decoding behavior.
@@ -655,3 +678,50 @@ Run 10 should test:
   repository subpath fail.
 - Whether delimiters such as comma, space, newline, query, fragment, and
   JSON-looking punctuation change that multi-occurrence behavior.
+
+## Run 10: multiple github.com occurrences
+
+Commit: `90532a1`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28632090942>
+
+Summary: `9` accepted, `33` rejected.
+
+### High-confidence observations
+
+- Later accepted GitHub owner/repository URLs did not rescue values whose first
+  `github.com` suffix was rejected:
+  - `https://github.com/apps/cyspbot,https://github.com/cysp`
+  - `https://github.com/apps/cyspbot,https://github.com/cysp/github-actions-id-token-exploration`
+  - `https://github.com/apps/cyspbot https://github.com/cysp`
+  - `https://github.com/apps/cyspbot?next=https://github.com/cysp`
+  - `https://github.com/apps/cyspbot#https://github.com/cysp/github-actions-id-token-exploration`
+  - `https://example.com/github.com/apps/cyspbot,https://github.com/cysp`
+- Later rejected GitHub App-looking text did not make accepted current-repository
+  subpaths fail:
+  - `https://github.com/cysp/github-actions-id-token-exploration/path/github.com/apps/cyspbot`
+  - `https://github.com/cysp/github-actions-id-token-exploration/issues?next=https://github.com/apps/cyspbot`
+  - `https://github.com/cysp/github-actions-id-token-exploration/issues#https://github.com/apps/cyspbot`
+- Extra text after the accepted owner prefix is still rejected when the first
+  suffix is not one of the accepted whole-owner forms:
+  - `https://github.com/cysp\nhttps://github.com/apps/cyspbot`
+  - `["https://github.com/cysp","https://github.com/apps/cyspbot"]`
+- The current repository name must end at a path boundary or the end of the
+  accepted suffix:
+  - rejected: `https://github.com/cysp/github-actions-id-token-explorationgithub.com/apps/cyspbot`
+- Raw mode again has a URL-fragment transport caveat. For
+  `.../issues#https://github.com/apps/cyspbot`, the raw request mode only sent
+  the pre-fragment audience to GitHub and the returned `aud` was
+  `https://github.com/cysp/github-actions-id-token-exploration/issues`.
+
+### Interpretation
+
+The `github.com` validation rule is best modeled as first-occurrence suffix
+validation, not as a scan for any acceptable GitHub URL and not as a scan that
+rejects every later GitHub App-looking substring. If the suffix beginning at the
+first case-insensitive `github.com` occurrence is accepted, later `github.com`
+text under an accepted current-repository subpath can appear in the issued
+`aud`. If that first suffix is rejected, later accepted owner/repository text
+does not make issuance succeed.
