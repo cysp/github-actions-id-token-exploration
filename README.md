@@ -45,7 +45,7 @@ this repository are intended to fill that gap with reproducible observations.
 
 ## Audience coverage
 
-The shared catalog in `scripts/audience-cases.json` currently expands to 255
+The shared catalog in `scripts/audience-cases.json` currently expands to 266
 cases:
 
 - documented controls: default audience and explicit empty audience
@@ -59,8 +59,8 @@ cases:
   HTTP, uppercase host, and pre-encoded URL variants
 - GitHub API URLs, provider-documented values, generic URL shapes, URI schemes,
   plain strings, reserved characters, whitespace, multi-audience-looking
-  strings, multiple-`github.com` values, query/fragment boundary variants, and
-  length boundaries
+  strings, multiple-`github.com` values, query/fragment boundary variants,
+  repository suffix boundary variants, and length boundaries
 
 The harness supports three request-construction modes. The broad, focused,
 reusable, self-hosted, and single-audience workflows use all three by default;

@@ -1316,6 +1316,72 @@
       "why": "Current owner plus non-repository child path with slash before query string."
     },
     {
+      "id": "repo-suffix-dot",
+      "category": "github-repo-suffix-boundary",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration.",
+      "why": "Current repository suffix followed immediately by a dot."
+    },
+    {
+      "id": "repo-suffix-dash",
+      "category": "github-repo-suffix-boundary",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration-extra",
+      "why": "Current repository suffix followed immediately by dash and more text."
+    },
+    {
+      "id": "repo-suffix-underscore",
+      "category": "github-repo-suffix-boundary",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration_extra",
+      "why": "Current repository suffix followed immediately by underscore and more text."
+    },
+    {
+      "id": "repo-suffix-colon",
+      "category": "github-repo-suffix-boundary",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration:extra",
+      "why": "Current repository suffix followed immediately by a colon."
+    },
+    {
+      "id": "repo-suffix-semicolon",
+      "category": "github-repo-suffix-boundary",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration;param=1",
+      "why": "Current repository suffix followed immediately by a semicolon path-parameter style value."
+    },
+    {
+      "id": "repo-suffix-at",
+      "category": "github-repo-suffix-boundary",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration@main",
+      "why": "Current repository suffix followed immediately by at-sign and more text."
+    },
+    {
+      "id": "repo-suffix-space",
+      "category": "github-repo-suffix-boundary",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration extra",
+      "why": "Current repository suffix followed immediately by a space and more text."
+    },
+    {
+      "id": "repo-suffix-newline",
+      "category": "github-repo-suffix-boundary",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration\nextra",
+      "why": "Current repository suffix followed immediately by a newline and more text."
+    },
+    {
+      "id": "repo-suffix-slash-dot",
+      "category": "github-repo-suffix-boundary",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/.",
+      "why": "Current repository suffix followed by slash and dot path segment."
+    },
+    {
+      "id": "repo-suffix-slash-semicolon",
+      "category": "github-repo-suffix-boundary",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/;param=1",
+      "why": "Current repository suffix followed by slash and semicolon path-parameter style value."
+    },
+    {
+      "id": "repo-suffix-slash-space",
+      "category": "github-repo-suffix-boundary",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/ extra",
+      "why": "Current repository suffix followed by slash, space, and more text."
+    },
+    {
       "id": "unicode-latin",
       "category": "generic-character-boundary",
       "audience": "café",

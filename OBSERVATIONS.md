@@ -831,3 +831,14 @@ For the focused case set, the event trigger did not affect issuance behavior.
 This supports the working conclusion that, after `id-token: write` makes the
 request environment available, the audience string is the controlling factor for
 these accept/reject decisions.
+
+## Next probes
+
+Run 13 should test:
+
+- Whether the current repository suffix must end at the exact repository name,
+  a slash, or a repository-root trailing slash before query/fragment.
+- Whether punctuation or whitespace immediately after the current repository
+  name is rejected when there is no path slash.
+- Whether slash-prefixed punctuation or whitespace remains accepted because it
+  is under the current repository path prefix.
