@@ -725,3 +725,14 @@ first case-insensitive `github.com` occurrence is accepted, later `github.com`
 text under an accepted current-repository subpath can appear in the issued
 `aud`. If that first suffix is rejected, later accepted owner/repository text
 does not make issuance succeed.
+
+## Next probes
+
+Run 11 should test:
+
+- Whether `?` and `#` are accepted after root, owner, and repository suffixes
+  when there is an explicit trailing slash before the delimiter.
+- Whether that behavior differs with or without a URL scheme.
+- Whether a trailing slash before query/fragment changes the already rejected
+  GitHub App URL family.
+- Whether owner child paths remain rejected even when followed by query text.

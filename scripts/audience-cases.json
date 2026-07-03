@@ -1226,6 +1226,96 @@
       "why": "JSON-looking value with an accepted owner URL before a rejected GitHub App URL."
     },
     {
+      "id": "github-root-slash-query",
+      "category": "github-query-fragment-boundary",
+      "audience": "https://github.com/?x=1",
+      "why": "GitHub root with explicit slash before a query string."
+    },
+    {
+      "id": "github-root-slash-fragment",
+      "category": "github-query-fragment-boundary",
+      "audience": "https://github.com/#fragment",
+      "why": "GitHub root with explicit slash before a fragment."
+    },
+    {
+      "id": "github-root-no-scheme-slash-query",
+      "category": "github-query-fragment-boundary",
+      "audience": "github.com/?x=1",
+      "why": "Bare GitHub root with explicit slash before a query string."
+    },
+    {
+      "id": "github-root-no-scheme-slash-fragment",
+      "category": "github-query-fragment-boundary",
+      "audience": "github.com/#fragment",
+      "why": "Bare GitHub root with explicit slash before a fragment."
+    },
+    {
+      "id": "owner-url-trailing-slash-query",
+      "category": "github-query-fragment-boundary",
+      "audience": "https://github.com/cysp/?tab=repositories",
+      "why": "Current owner URL with explicit slash before a query string."
+    },
+    {
+      "id": "owner-url-trailing-slash-fragment",
+      "category": "github-query-fragment-boundary",
+      "audience": "https://github.com/cysp/#profile",
+      "why": "Current owner URL with explicit slash before a fragment."
+    },
+    {
+      "id": "owner-url-no-scheme-trailing-slash-query",
+      "category": "github-query-fragment-boundary",
+      "audience": "github.com/cysp/?tab=repositories",
+      "why": "Bare current owner URL with explicit slash before a query string."
+    },
+    {
+      "id": "owner-url-no-scheme-trailing-slash-fragment",
+      "category": "github-query-fragment-boundary",
+      "audience": "github.com/cysp/#profile",
+      "why": "Bare current owner URL with explicit slash before a fragment."
+    },
+    {
+      "id": "repo-url-trailing-slash-fragment",
+      "category": "github-query-fragment-boundary",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/#readme",
+      "why": "Current repository URL with explicit slash before a fragment."
+    },
+    {
+      "id": "repo-url-no-scheme-trailing-slash-query",
+      "category": "github-query-fragment-boundary",
+      "audience": "github.com/cysp/github-actions-id-token-exploration/?tab=readme",
+      "why": "Bare current repository URL with explicit slash before a query string."
+    },
+    {
+      "id": "repo-url-no-scheme-trailing-slash-fragment",
+      "category": "github-query-fragment-boundary",
+      "audience": "github.com/cysp/github-actions-id-token-exploration/#readme",
+      "why": "Bare current repository URL with explicit slash before a fragment."
+    },
+    {
+      "id": "app-url-trailing-slash-query",
+      "category": "github-query-fragment-boundary",
+      "audience": "https://github.com/apps/cyspbot/?installation_id=1",
+      "why": "Rejected GitHub App URL with explicit slash before a query string."
+    },
+    {
+      "id": "app-url-trailing-slash-fragment",
+      "category": "github-query-fragment-boundary",
+      "audience": "https://github.com/apps/cyspbot/#oidc",
+      "why": "Rejected GitHub App URL with explicit slash before a fragment."
+    },
+    {
+      "id": "owner-child-path-query",
+      "category": "github-query-fragment-boundary",
+      "audience": "https://github.com/cysp/actions?x=1",
+      "why": "Current owner plus non-repository child path with query string."
+    },
+    {
+      "id": "owner-child-path-trailing-slash-query",
+      "category": "github-query-fragment-boundary",
+      "audience": "https://github.com/cysp/actions/?x=1",
+      "why": "Current owner plus non-repository child path with slash before query string."
+    },
+    {
       "id": "unicode-latin",
       "category": "generic-character-boundary",
       "audience": "café",

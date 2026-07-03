@@ -35,7 +35,7 @@ jobs:
           CASE_REGEX_INPUT: ${{ github.event.inputs.case_regex }}
           REQUEST_MODES: ${{ github.event.inputs.modes || 'toolkit,urlsearchparams,raw' }}
         run: |
-          DEFAULT_CASE_REGEX="^(multi-first-invalid-then-owner-comma|multi-first-invalid-then-repo-comma|multi-first-invalid-then-owner-space|multi-first-invalid-then-owner-query|multi-first-invalid-then-repo-fragment|multi-example-first-invalid-then-owner|multi-first-repo-path-then-invalid-path|multi-first-repo-query-then-invalid|multi-first-repo-fragment-then-invalid|multi-first-owner-newline-then-invalid|multi-first-invalid-newline-then-owner|multi-repo-prefix-with-adjacent-github|json-first-invalid-then-owner|json-first-owner-then-invalid)$"
+          DEFAULT_CASE_REGEX="^(github-root-slash-query|github-root-slash-fragment|github-root-no-scheme-slash-query|github-root-no-scheme-slash-fragment|owner-url-trailing-slash-query|owner-url-trailing-slash-fragment|owner-url-no-scheme-trailing-slash-query|owner-url-no-scheme-trailing-slash-fragment|repo-url-trailing-slash-fragment|repo-url-no-scheme-trailing-slash-query|repo-url-no-scheme-trailing-slash-fragment|app-url-trailing-slash-query|app-url-trailing-slash-fragment|owner-child-path-query|owner-child-path-trailing-slash-query)$"
           CASE_REGEX="${CASE_REGEX_INPUT:-$DEFAULT_CASE_REGEX}"
           node scripts/run-audience-matrix.mjs \
             --outputDir oidc-audience-results-targeted \
