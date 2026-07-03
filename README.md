@@ -93,6 +93,11 @@ is checking permission behavior rather than encoding behavior.
 Each workflow writes a Markdown job summary and, where artifact upload is
 available, JSON and CSV result files.
 
+Push-triggered probes run only when workflow definitions or files under
+`scripts/` change. Documentation-only commits should not request new OIDC
+tokens; use `workflow_dispatch` when a manual rerun is needed without changing
+the probe definitions.
+
 Rejected values are expected and are part of the evidence. The investigation
 workflows should continue after individual audience failures so the result
 artifact contains the full acceptance matrix. The permission-control workflow is
