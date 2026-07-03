@@ -402,6 +402,8 @@ This is the best model supported by the current evidence:
 1. For audiences that do not contain the case-insensitive substring `github.com`,
    GitHub accepts a very broad set of arbitrary strings, URL forms, schemes,
    punctuation, whitespace, control characters, Unicode, and long values.
+   Whitespace-only and control-only custom audiences are accepted literally in
+   toolkit-compatible modes.
 2. If the audience contains `github.com` case-insensitively, GitHub validates
    the suffix beginning at the first `github.com` occurrence. Later valid
    GitHub URL text does not rescue an earlier rejected suffix.
@@ -458,6 +460,8 @@ This is the best model supported by the current evidence:
 13. For the cyspbot-focused audience set, `push` and `workflow_dispatch`
     produced identical issuer outcomes. Current evidence does not show event
     trigger type as a factor.
+14. Omitting the audience parameter and sending an explicit empty audience both
+    produce the default owner audience, `https://github.com/cysp`.
 
 ## Practical conclusion
 
@@ -960,3 +964,46 @@ Run 15 should test:
   custom audience values.
 - Whether these boundary values behave consistently across toolkit-compatible
   request construction modes and raw mode.
+
+## Run 15: empty, whitespace-only, and control-only audiences
+
+Commit: `26a4b82`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28645827067>
+
+Summary: `41` accepted, `0` rejected.
+
+### High-confidence observations
+
+- Omitting the audience parameter produced the default owner audience:
+  - `aud`: `https://github.com/cysp`
+- Sending an explicit empty audience also produced the default owner audience:
+  - `aud`: `https://github.com/cysp`
+- Whitespace-only audiences were accepted literally in toolkit-compatible modes:
+  - single space
+  - multiple spaces
+  - tab
+  - newline
+  - CRLF
+- A NUL-only audience was accepted literally in toolkit-compatible modes.
+- Embedded control characters were accepted literally in toolkit-compatible
+  modes:
+  - `before\u0000after`
+  - `before\rafter`
+  - `before\r\nafter`
+  - `before\u007fafter`
+- Raw mode produced transport artifacts for unencoded whitespace-only and
+  control-only values. For example, raw mode for a single-space audience
+  returned the default owner `aud`, while toolkit-compatible modes returned the
+  literal single-space `aud`. Treat toolkit and `urlsearchparams` as the
+  authoritative results for literal whitespace/control audiences.
+
+### Interpretation
+
+Empty is special: it behaves like no custom audience and yields the documented
+default owner audience. Non-empty whitespace-only and control-only values are
+valid literal custom audiences when encoded by toolkit-compatible request
+construction. This reinforces that GitHub's issuer is permissive for values that
+do not trigger the `github.com` substring allowlist.
