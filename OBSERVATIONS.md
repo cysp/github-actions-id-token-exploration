@@ -107,7 +107,7 @@ These are hypotheses until narrowed by targeted follow-up runs.
 
 ## Next probes
 
-The next run should test:
+Run 2 should test:
 
 - Whether arbitrary current-repository subpaths are accepted.
 - Whether arbitrary current-owner subpaths are accepted.
@@ -118,3 +118,84 @@ The next run should test:
 - Whether encoded `/apps` variants are decoded before validation.
 - Whether comma or space separated values are rejected only when they contain a
   rejected GitHub URL.
+
+## Run 2: targeted GitHub path and substring probes
+
+Commit: `4e1dc3b`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28630521128>
+
+Summary: `36` accepted, `54` rejected.
+
+### High-confidence observations
+
+- Arbitrary current-repository subpaths were accepted:
+  - `https://github.com/cysp/github-actions-id-token-exploration/issues`
+  - `https://github.com/cysp/github-actions-id-token-exploration/pulls`
+  - `https://github.com/cysp/github-actions-id-token-exploration/actions`
+  - `https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28625018353`
+  - `https://github.com/cysp/github-actions-id-token-exploration/settings`
+- Current-owner paths that are not the repository name were rejected:
+  - `https://github.com/cysp/apps/cyspbot`
+  - `https://github.com/cysp/actions`
+  - `https://github.com/cysp/repositories`
+- Top-level GitHub reserved paths were rejected:
+  - `https://github.com/marketplace`
+  - `https://github.com/login`
+  - `https://github.com/settings`
+  - `https://github.com/new`
+  - `https://github.com/features`
+  - `https://github.com/enterprise`
+- Encoded `/apps/cyspbot` variants under `github.com` were rejected:
+  - `https://github.com/%61pps/cyspbot`
+  - `https://github.com/a%70ps/cyspbot`
+  - `https://github.com/apps%2Fcyspbot`
+  - `https://github.com//apps/cyspbot`
+- The rejected GitHub App URL was also rejected when embedded in larger strings:
+  - `["https://github.com/apps/cyspbot"]`
+  - `prefix:https://github.com/apps/cyspbot`
+  - `https://github.com/apps/cyspbot:suffix`
+  - `(https://github.com/apps/cyspbot)`
+- The `/apps/cyspbot` path itself is not globally rejected. These non-GitHub
+  URLs were accepted:
+  - `https://example.com/apps/cyspbot`
+  - `https://github.example.com/apps/cyspbot`
+- Separator characters alone are not rejected. These were accepted:
+  - `cyspbot,api://cyspbot`
+  - `cyspbot,https://example.com/apps/cyspbot`
+  - `cyspbot api://cyspbot`
+  - `cyspbot https://example.com/apps/cyspbot`
+- Surprising result: `https://github.com.example.com/apps/cyspbot` was rejected.
+  That is not the `github.com` host, so follow-up should determine whether the
+  issuer is doing substring matching, suffix matching, URL parser canonicalizing,
+  or another host/path heuristic.
+
+## Refined hypotheses after run 2
+
+1. `github.com/{owner}/{repo}` for the current repository is accepted as a
+   prefix, with arbitrary additional path segments.
+2. `github.com/{owner}` for the current owner is accepted only as that owner URL,
+   with optional trailing slash and scheme/host case variation. Arbitrary
+   subpaths below the owner are rejected unless the next path segment is the
+   current repository name.
+3. Top-level `github.com` paths are rejected unless the path is empty or matches
+   the current owner/repository rule.
+4. The issuer appears to detect rejected GitHub App URLs even when embedded
+   inside larger strings.
+5. Host-boundary handling is not fully understood because
+   `github.com.example.com` was rejected while `github.example.com` was accepted.
+
+## Next probes
+
+Run 3 should test:
+
+- Whether hostnames containing `github.com` as a prefix, suffix, or label are
+  rejected only with `/apps/cyspbot` or more generally.
+- Whether `github.com` substring detection applies without a URL scheme.
+- Whether current repository query strings and fragments are accepted or
+  rejected.
+- Whether current repository paths with a `.git` segment under the accepted repo
+  prefix are accepted.
+- Whether `api.github.com` rejection is host-specific or path-specific.

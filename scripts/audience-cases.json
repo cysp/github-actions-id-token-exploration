@@ -128,6 +128,30 @@
       "why": "Current repository settings path."
     },
     {
+      "id": "repo-url-query",
+      "category": "github-current-repo-query",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration?tab=readme",
+      "why": "Current repository URL with query string."
+    },
+    {
+      "id": "repo-url-fragment",
+      "category": "github-current-repo-query",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration#readme",
+      "why": "Current repository URL with fragment."
+    },
+    {
+      "id": "repo-url-path-query",
+      "category": "github-current-repo-query",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/issues?q=is%3Aissue",
+      "why": "Accepted current repository path with query string."
+    },
+    {
+      "id": "repo-url-git-segment",
+      "category": "github-current-repo-path",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/.git",
+      "why": ".git path segment below the accepted current repository prefix."
+    },
+    {
       "id": "repo-url-git-suffix",
       "category": "github-repo",
       "audience": "https://github.com/cysp/github-actions-id-token-exploration.git",
@@ -278,6 +302,24 @@
       "why": "GitHub App API URL."
     },
     {
+      "id": "github-api-root",
+      "category": "github-api",
+      "audience": "https://api.github.com",
+      "why": "GitHub API host root."
+    },
+    {
+      "id": "github-api-root-slash",
+      "category": "github-api",
+      "audience": "https://api.github.com/",
+      "why": "GitHub API host root slash."
+    },
+    {
+      "id": "github-api-current-repo",
+      "category": "github-api",
+      "audience": "https://api.github.com/repos/cysp/github-actions-id-token-exploration",
+      "why": "GitHub API URL for the current repository."
+    },
+    {
       "id": "github-api-repo",
       "category": "github-api",
       "audience": "https://api.github.com/repos/cysp/github-actions-id-token-exploration",
@@ -390,6 +432,54 @@
       "category": "non-github-control",
       "audience": "https://github.com.example.com/apps/cyspbot",
       "why": "Domain starts with github.com but is not github.com."
+    },
+    {
+      "id": "github-com-suffix-domain-root",
+      "category": "host-boundary",
+      "audience": "https://github.com.example.com",
+      "why": "Domain starts with github.com without apps path."
+    },
+    {
+      "id": "github-com-suffix-domain-other-path",
+      "category": "host-boundary",
+      "audience": "https://github.com.example.com/other",
+      "why": "Domain starts with github.com with a non-app path."
+    },
+    {
+      "id": "github-com-suffix-domain-current-owner",
+      "category": "host-boundary",
+      "audience": "https://github.com.example.com/cysp",
+      "why": "Domain starts with github.com and uses current owner path."
+    },
+    {
+      "id": "github-com-prefix-domain-apps",
+      "category": "host-boundary",
+      "audience": "https://notgithub.com/apps/cyspbot",
+      "why": "Domain ends with github.com characters but is not github.com."
+    },
+    {
+      "id": "github-com-dot-au-apps",
+      "category": "host-boundary",
+      "audience": "https://github.com.au/apps/cyspbot",
+      "why": "Domain begins with github.com plus another public suffix label."
+    },
+    {
+      "id": "github-com-typo-apps",
+      "category": "host-boundary",
+      "audience": "https://github.comm/apps/cyspbot",
+      "why": "Typo domain near github.com."
+    },
+    {
+      "id": "github-com-subdomain-apps",
+      "category": "host-boundary",
+      "audience": "https://foo.github.com/apps/cyspbot",
+      "why": "Subdomain under github.com."
+    },
+    {
+      "id": "githubusercontent-apps",
+      "category": "host-boundary",
+      "audience": "https://raw.githubusercontent.com/apps/cyspbot",
+      "why": "GitHub-owned but non-github.com domain."
     },
     {
       "id": "example-http-root",
@@ -576,6 +666,30 @@
       "category": "github-app-substring",
       "audience": "(https://github.com/apps/cyspbot)",
       "why": "GitHub App URL embedded in parentheses."
+    },
+    {
+      "id": "plain-scheme-less-app-url-substring",
+      "category": "github-app-substring",
+      "audience": "prefix github.com/apps/cyspbot suffix",
+      "why": "Scheme-less GitHub App URL embedded in a larger string."
+    },
+    {
+      "id": "encoded-app-url-substring",
+      "category": "github-app-substring",
+      "audience": "prefix https:%2F%2Fgithub.com%2Fapps%2Fcyspbot suffix",
+      "why": "Percent-encoded GitHub App URL embedded in a larger string."
+    },
+    {
+      "id": "safe-github-com-substring",
+      "category": "github-app-substring",
+      "audience": "prefix https://github.com/cysp suffix",
+      "why": "Accepted GitHub owner URL embedded in a larger string."
+    },
+    {
+      "id": "safe-current-repo-substring",
+      "category": "github-app-substring",
+      "audience": "prefix https://github.com/cysp/github-actions-id-token-exploration suffix",
+      "why": "Accepted current repository URL embedded in a larger string."
     }
   ],
   "generated": [
