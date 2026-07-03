@@ -75,10 +75,12 @@ it is checking permission behavior rather than encoding behavior.
 ## Workflows
 
 - `oidc-audience-matrix.yml` runs the broad audience catalog on GitHub-hosted
-  Linux, macOS, and Windows runners, using all three request modes by default.
+  Linux using all three request modes by default.
 - `oidc-audience-cyspbot-focused.yml` tests the exact failing
   `https://github.com/apps/cyspbot` value and close variants using multiple
   request encoding strategies.
+- `oidc-audience-targeted.yml` runs targeted follow-up probes chosen from the
+  current findings in `OBSERVATIONS.md`.
 - `oidc-audience-permission-controls.yml` verifies the expected failure mode
   when `id-token: write` is absent.
 - `oidc-audience-reusable-caller.yml` invokes `_oidc-audience-reusable.yml` to

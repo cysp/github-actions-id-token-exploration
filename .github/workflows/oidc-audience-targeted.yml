@@ -1,0 +1,52 @@
+name: OIDC audience targeted
+
+on:
+  workflow_dispatch:
+    inputs:
+      case_regex:
+        description: Optional JavaScript regular expression used to filter case IDs.
+        required: false
+        default: ""
+      modes:
+        description: "Comma-separated request modes: toolkit,urlsearchparams,raw."
+        required: false
+        default: toolkit,urlsearchparams,raw
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  targeted-audience:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        # actions/checkout v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+
+      - name: Run targeted audience probes
+        shell: bash
+        env:
+          CASE_REGEX_INPUT: ${{ github.event.inputs.case_regex }}
+          REQUEST_MODES: ${{ github.event.inputs.modes || 'toolkit,urlsearchparams,raw' }}
+        run: |
+          DEFAULT_CASE_REGEX="^(repo-url-issues|repo-url-pulls|repo-url-actions|repo-url-actions-run|repo-url-settings|github-marketplace-root|github-login-root|github-settings-root|github-new-root|github-features-root|github-enterprise-root|github-app-encoded-path-a|github-app-encoded-path-p|github-app-encoded-slash|github-app-double-slash-path|current-owner-apps-path|current-owner-actions-path|current-owner-repos-path|example-apps-cyspbot|example-api-app|github-looking-other-domain|github-com-suffix-domain|comma-separated-safe-audiences|comma-separated-example-url|space-separated-safe-audiences|space-separated-example-url|json-array-app-url|prefix-app-url|suffix-app-url|parenthesized-app-url)$"
+          CASE_REGEX="${CASE_REGEX_INPUT:-$DEFAULT_CASE_REGEX}"
+          node scripts/run-audience-matrix.mjs \
+            --outputDir oidc-audience-results-targeted \
+            --caseRegex "$CASE_REGEX" \
+            --modes "$REQUEST_MODES"
+
+      - name: Upload results
+        if: always()
+        # actions/upload-artifact v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: oidc-audience-results-targeted
+          path: oidc-audience-results-targeted
+          if-no-files-found: error

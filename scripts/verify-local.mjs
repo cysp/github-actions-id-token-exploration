@@ -11,7 +11,8 @@ const files = [
   '.github/workflows/oidc-audience-reusable-caller.yml',
   '.github/workflows/_oidc-audience-reusable.yml',
   '.github/workflows/oidc-audience-single.yml',
-  '.github/workflows/oidc-audience-self-hosted.yml'
+  '.github/workflows/oidc-audience-self-hosted.yml',
+  '.github/workflows/oidc-audience-targeted.yml'
 ];
 
 for (const file of files) {
