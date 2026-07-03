@@ -448,6 +448,9 @@ This is the best model supported by the current evidence:
     toolkit-compatible request modes. Raw mode decodes those values before
     GitHub sees the audience and can therefore reject values that encoded modes
     accept.
+13. For the cyspbot-focused audience set, `push` and `workflow_dispatch`
+    produced identical issuer outcomes. Current evidence does not show event
+    trigger type as a factor.
 
 ## Practical conclusion
 
@@ -788,3 +791,43 @@ all accepted GitHub suffixes. GitHub root and current-owner audiences must end
 exactly at the accepted suffix or trailing slash. The current repository accepts
 query/fragment text only when the suffix has a path boundary before the
 delimiter, such as the repository trailing slash or a subpath.
+
+## Run 12: workflow dispatch trigger check
+
+Commit: `9f98550`
+
+Runs:
+
+- `workflow_dispatch` focused run: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28633390811>
+- Compared push focused run: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28632505925>
+
+Summary: both runs returned `21` accepted, `18` rejected, with `0` outcome
+differences across the focused case/mode pairs.
+
+### High-confidence observations
+
+- The exact failing value was rejected in both push and `workflow_dispatch`:
+  - `https://github.com/apps/cyspbot`
+- Close GitHub App URL variants were also rejected in both trigger types:
+  - `https://github.com/apps`
+  - `https://github.com/apps/cyspbot/`
+  - `https://github.com/apps/cyspbot?installation_id=1`
+  - `https://github.com/apps/cyspbot#oidc`
+  - `github.com/apps/cyspbot`
+- Supported non-GitHub-App-specific values were accepted in both trigger types:
+  - `cyspbot`
+  - `api://cyspbot`
+  - `urn:github:app:cyspbot`
+  - `api://AzureADTokenExchange`
+  - `sts.amazonaws.com`
+- Current owner and repository GitHub URL values were accepted in both trigger
+  types:
+  - `https://github.com/cysp`
+  - `https://github.com/cysp/github-actions-id-token-exploration`
+
+### Interpretation
+
+For the focused case set, the event trigger did not affect issuance behavior.
+This supports the working conclusion that, after `id-token: write` makes the
+request environment available, the audience string is the controlling factor for
+these accept/reject decisions.
