@@ -218,6 +218,54 @@
       "why": "Bare github.com embedded in a larger string."
     },
     {
+      "id": "github-root-no-scheme-query",
+      "category": "github-delimiter",
+      "audience": "github.com?x=1",
+      "why": "Bare github.com followed by query delimiter."
+    },
+    {
+      "id": "github-root-no-scheme-fragment",
+      "category": "github-delimiter",
+      "audience": "github.com#fragment",
+      "why": "Bare github.com followed by fragment delimiter."
+    },
+    {
+      "id": "github-root-no-scheme-colon",
+      "category": "github-delimiter",
+      "audience": "github.com:443",
+      "why": "Bare github.com followed by colon."
+    },
+    {
+      "id": "github-root-no-scheme-comma",
+      "category": "github-delimiter",
+      "audience": "github.com,cyspbot",
+      "why": "Bare github.com followed by comma and accepted plain audience."
+    },
+    {
+      "id": "github-owner-no-scheme-query",
+      "category": "github-delimiter",
+      "audience": "github.com/cysp?tab=repositories",
+      "why": "Bare current owner followed by query delimiter."
+    },
+    {
+      "id": "github-owner-no-scheme-comma",
+      "category": "github-delimiter",
+      "audience": "github.com/cysp,cyspbot",
+      "why": "Bare current owner followed by comma and accepted plain audience."
+    },
+    {
+      "id": "github-repo-no-scheme-comma",
+      "category": "github-delimiter",
+      "audience": "github.com/cysp/github-actions-id-token-exploration,cyspbot",
+      "why": "Bare current repository followed by comma and accepted plain audience."
+    },
+    {
+      "id": "github-repo-no-scheme-close-paren",
+      "category": "github-delimiter",
+      "audience": "github.com/cysp/github-actions-id-token-exploration)",
+      "why": "Bare current repository followed by closing parenthesis."
+    },
+    {
       "id": "github-apps-root",
       "category": "github-app",
       "audience": "https://github.com/apps",
@@ -786,6 +834,30 @@
       "category": "github-app-substring",
       "audience": "cyspbot,https://github.com/cysp/github-actions-id-token-exploration",
       "why": "Accepted current repository URL embedded after a comma."
+    },
+    {
+      "id": "comma-current-owner-url",
+      "category": "github-comma-list",
+      "audience": "cyspbot,https://github.com/cysp",
+      "why": "Accepted current owner URL embedded after a comma."
+    },
+    {
+      "id": "comma-github-root-url",
+      "category": "github-comma-list",
+      "audience": "cyspbot,https://github.com",
+      "why": "Accepted GitHub root URL embedded after a comma."
+    },
+    {
+      "id": "comma-invalid-github-owner",
+      "category": "github-comma-list",
+      "audience": "cyspbot,https://github.com/actions",
+      "why": "Comma list containing a rejected GitHub owner/path."
+    },
+    {
+      "id": "comma-valid-and-invalid-github",
+      "category": "github-comma-list",
+      "audience": "https://github.com/cysp,https://github.com/apps/cyspbot",
+      "why": "Comma list containing one accepted and one rejected GitHub URL."
     }
   ],
   "generated": [

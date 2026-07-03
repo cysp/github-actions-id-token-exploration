@@ -269,3 +269,71 @@ Run 4 should test:
   subpaths.
 - Whether the current repository URL can be embedded with punctuation that might
   be parsed as a delimiter.
+
+## Run 4: substring and delimiter probes
+
+Commit: `ddf778d`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28630772842>
+
+Summary: `33` accepted, `15` rejected.
+
+### High-confidence observations
+
+- Bare `github.com` forms are accepted if they match an already accepted suffix:
+  - `github.com`
+  - `github.com/`
+  - `github.com/cysp`
+  - `github.com/cysp/github-actions-id-token-exploration`
+- A bare embedded `github.com` with extra text is rejected:
+  - `prefix github.com suffix`
+- The `github.com` substring rule explains earlier surprising host-boundary
+  behavior:
+  - accepted: `https://notgithub.com`
+  - rejected: `https://notgithub.com/other`
+  - accepted: `https://notgithub.com/cysp`
+  - accepted: `https://mygithub.org/apps/cyspbot`
+- This strongly suggests GitHub is not only parsing the URL hostname. Instead,
+  the issuer appears to search for literal `github.com` inside the complete
+  audience string and validate the suffix beginning at that substring.
+- The substring can appear in path or query and still trigger rejection:
+  - `https://example.com/github.com/apps/cyspbot`
+  - `https://example.com/path?next=https://github.com/apps/cyspbot`
+- Current repository query behavior is now clearer:
+  - accepted: `https://github.com/cysp/github-actions-id-token-exploration/?tab=readme`
+  - accepted: `https://github.com/cysp/github-actions-id-token-exploration/tree/main?plain=1`
+  - accepted: `https://github.com/cysp/github-actions-id-token-exploration/issues#created-by-me`
+  - previously rejected: `https://github.com/cysp/github-actions-id-token-exploration?tab=readme`
+- Embedded current repository URL behavior depends on delimiter:
+  - rejected: `(https://github.com/cysp/github-actions-id-token-exploration)`
+  - accepted: `cyspbot,https://github.com/cysp/github-actions-id-token-exploration`
+
+## Refined hypotheses after run 4
+
+1. The issuer scans the full audience string for the literal substring
+   `github.com`.
+2. If `github.com` is present, the suffix beginning at `github.com` must match a
+   GitHub-specific allowlist. Observed allowed suffixes include:
+   - `github.com`
+   - `github.com/`
+   - `github.com/cysp`
+   - `github.com/cysp/`
+   - `github.com/cysp/github-actions-id-token-exploration`
+   - `github.com/cysp/github-actions-id-token-exploration/`
+   - subpaths under `github.com/cysp/github-actions-id-token-exploration/`
+3. The current repository root with query but no slash before `?` is rejected;
+   the same root with `/?` is accepted.
+4. Comma may act as a delimiter between independently validated audience-looking
+   values. Space and parentheses do not appear to act as safe delimiters.
+
+## Next probes
+
+Run 5 should test:
+
+- Delimiters after otherwise accepted `github.com` suffixes: `?`, `#`, `:`,
+  comma, space, and closing punctuation.
+- Comma-separated values where one item is a valid GitHub owner/repo URL.
+- Whether comma-separated values are accepted only when every GitHub-containing
+  item satisfies the allowlist.
