@@ -43,6 +43,9 @@ The documentation confirms that custom audiences exist, but it does not define
 the service-side validation rules for accepted audience forms. The workflows in
 this repository are intended to fill that gap with reproducible observations.
 
+See `REPORT.md` for the concise evidence-backed report of allowed and
+disallowed audience forms.
+
 ## Current conclusion
 
 Do not use `https://github.com/apps/cyspbot` as the GitHub Actions OIDC
@@ -55,7 +58,7 @@ for example `urn:github:app:cyspbot`, `api://cyspbot`, or `cyspbot`.
 
 ## Audience coverage
 
-The shared catalog in `scripts/audience-cases.json` currently expands to 289
+The shared catalog in `scripts/audience-cases.json` currently contains 264 base
 cases:
 
 - documented controls: default audience and explicit empty audience
