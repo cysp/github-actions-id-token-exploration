@@ -478,14 +478,28 @@ Supported GitHub-App-specific audience shapes observed so far include:
 Of these, `urn:github:app:cyspbot` is the most explicit non-URL shape, while
 `api://cyspbot` follows a commonly accepted audience URI pattern.
 
-## Remaining questions
+## Investigation status
 
-- Whether GitHub documents or will confirm this `github.com` substring allowlist
-  behavior.
-- Whether the allowlist is exactly tied to the current repository owner and
-  repository, or whether enterprise/org settings can alter it.
-- Whether `github.com` substring handling is intentional or an implementation
-  side effect.
+The evidence is sufficient for the motivating failure: GitHub rejects
+`https://github.com/apps/cyspbot` because the first case-insensitive
+`github.com` suffix is in a GitHub-reserved path that is outside the issuer's
+observed allowlist. The supported replacement forms should avoid `github.com`
+entirely when identifying the GitHub App.
+
+No remaining untested variation is likely to change that conclusion. Useful
+future work would require either GitHub documenting or confirming the internal
+allowlist behavior, or rerunning the same focused probes from a materially
+different repository owner/repository context to see how the owner/repository
+allowlist changes.
+
+### Residual caveats
+
+- GitHub's public documentation confirms custom audiences and the default owner
+  audience, but does not document the observed `github.com` substring allowlist.
+- The experiments prove behavior for this repository context:
+  `cysp/github-actions-id-token-exploration` on GitHub-hosted Linux runners.
+- The experiments do not prove whether organization, enterprise, or future
+  GitHub issuer changes can alter the owner/repository allowlist.
 
 ## Next probes
 

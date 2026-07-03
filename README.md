@@ -43,6 +43,16 @@ The documentation confirms that custom audiences exist, but it does not define
 the service-side validation rules for accepted audience forms. The workflows in
 this repository are intended to fill that gap with reproducible observations.
 
+## Current conclusion
+
+Do not use `https://github.com/apps/cyspbot` as the GitHub Actions OIDC
+audience. In this repository's experiments, GitHub rejects that value before a
+token is issued because the first case-insensitive `github.com` suffix is a
+GitHub App URL path outside the issuer's observed allowlist.
+
+Use a non-`github.com` custom audience for a GitHub-App-specific relying party,
+for example `urn:github:app:cyspbot`, `api://cyspbot`, or `cyspbot`.
+
 ## Audience coverage
 
 The shared catalog in `scripts/audience-cases.json` currently expands to 289
