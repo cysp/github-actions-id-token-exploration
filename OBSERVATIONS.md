@@ -381,7 +381,7 @@ This is the best model supported by the current evidence:
 
 1. For audiences that do not contain the case-insensitive substring `github.com`,
    GitHub accepts a very broad set of arbitrary strings, URL forms, schemes,
-   punctuation, whitespace, and long values.
+   punctuation, whitespace, control characters, Unicode, and long values.
 2. If the audience contains `github.com` case-insensitively, GitHub appears to
    validate the suffix beginning at the first `github.com` occurrence.
 3. The observed accepted `github.com` suffixes are:
@@ -605,3 +605,41 @@ Run 9 should test:
 - Whether there is a practical maximum audience length above 2048 characters.
 - Whether generic control characters, Unicode, invalid percent escapes, and
   JSON-looking values are accepted when they do not contain `github.com`.
+
+## Run 9: generic character and length boundaries
+
+Commit: `edb70d9`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28631801514>
+
+Summary: `51` accepted, `0` rejected.
+
+### High-confidence observations
+
+- Generic Unicode values were accepted:
+  - `café`
+  - `対象`
+  - `audience-😀`
+- Generic control-character values were accepted:
+  - NUL
+  - carriage return
+  - CRLF
+  - DEL
+- Invalid-percent-looking strings were accepted:
+  - `bad%zzescape`
+  - `bad%`
+- JSON-looking values without `github.com` were accepted:
+  - `["cyspbot","api://cyspbot"]`
+  - `{"aud":"cyspbot"}`
+- Long generic values were accepted at 4096, 8192, and 16384 characters for both
+  plain `a...` strings and `https://example.com/...` URL-shaped strings.
+
+### Interpretation
+
+The issuer is extremely permissive for audience values that do not trigger the
+case-insensitive `github.com` substring rule. The only rejection family observed
+so far is the GitHub-specific allowlist behavior, not a general character,
+encoding, JSON, control-character, or practical length restriction up to 16K
+characters.
