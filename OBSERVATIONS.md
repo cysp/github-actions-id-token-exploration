@@ -541,3 +541,14 @@ additional path text is accepted even if a URL parser might later interpret that
 text as a traversal. Relying parties should compare the `aud` value as an exact
 string or with their own explicit canonicalization rules, not by normalizing it
 as a URL after issuance.
+
+## Next probes
+
+Run 8 should test:
+
+- Whether ports, userinfo, trailing-dot hostnames, or non-HTTP schemes are
+  canonicalized before the `github.com` allowlist is applied.
+- Whether percent-encoding characters inside `github.com` hides the substring or
+  is decoded before matching.
+- Whether SSH-like URLs without a `.git` suffix are accepted when their suffix
+  otherwise matches the current owner/repository allowlist.

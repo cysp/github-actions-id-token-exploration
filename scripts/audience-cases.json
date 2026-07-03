@@ -320,6 +320,30 @@
       "why": "Current repository URL with uppercase repository path."
     },
     {
+      "id": "github-app-encoded-host-u",
+      "category": "github-encoded-host",
+      "audience": "https://gith%75b.com/apps/cyspbot",
+      "why": "GitHub App URL with percent-encoded host character."
+    },
+    {
+      "id": "github-app-encoded-host-g",
+      "category": "github-encoded-host",
+      "audience": "https://%67ithub.com/apps/cyspbot",
+      "why": "GitHub App URL with percent-encoded first host character."
+    },
+    {
+      "id": "github-owner-encoded-host-u",
+      "category": "github-encoded-host",
+      "audience": "https://gith%75b.com/cysp",
+      "why": "Current owner URL with percent-encoded host character."
+    },
+    {
+      "id": "github-app-bare-encoded-host-u",
+      "category": "github-encoded-host",
+      "audience": "gith%75b.com/apps/cyspbot",
+      "why": "Bare GitHub App path with percent-encoded host character."
+    },
+    {
       "id": "github-root-no-scheme-query",
       "category": "github-delimiter",
       "audience": "github.com?x=1",
@@ -342,6 +366,66 @@
       "category": "github-delimiter",
       "audience": "github.com,cyspbot",
       "why": "Bare github.com followed by comma and accepted plain audience."
+    },
+    {
+      "id": "github-root-https-port-443",
+      "category": "github-url-canonicalization",
+      "audience": "https://github.com:443",
+      "why": "GitHub root URL with default HTTPS port."
+    },
+    {
+      "id": "github-owner-https-port-443",
+      "category": "github-url-canonicalization",
+      "audience": "https://github.com:443/cysp",
+      "why": "Current owner URL with default HTTPS port."
+    },
+    {
+      "id": "github-repo-https-port-443",
+      "category": "github-url-canonicalization",
+      "audience": "https://github.com:443/cysp/github-actions-id-token-exploration",
+      "why": "Current repository URL with default HTTPS port."
+    },
+    {
+      "id": "github-repo-https-port-8443",
+      "category": "github-url-canonicalization",
+      "audience": "https://github.com:8443/cysp/github-actions-id-token-exploration",
+      "why": "Current repository URL with non-default HTTPS port."
+    },
+    {
+      "id": "github-owner-userinfo",
+      "category": "github-url-canonicalization",
+      "audience": "https://token@github.com/cysp",
+      "why": "Current owner URL with userinfo."
+    },
+    {
+      "id": "github-app-userinfo",
+      "category": "github-url-canonicalization",
+      "audience": "https://token@github.com/apps/cyspbot",
+      "why": "GitHub App URL with userinfo."
+    },
+    {
+      "id": "github-owner-trailing-dot-host",
+      "category": "github-url-canonicalization",
+      "audience": "https://github.com./cysp",
+      "why": "Current owner URL with trailing dot on host."
+    },
+    {
+      "id": "github-app-trailing-dot-host",
+      "category": "github-url-canonicalization",
+      "audience": "https://github.com./apps/cyspbot",
+      "why": "GitHub App URL with trailing dot on host."
+    },
+    {
+      "id": "github-owner-ftp-scheme",
+      "category": "github-url-canonicalization",
+      "audience": "ftp://github.com/cysp",
+      "why": "Current owner URL with ftp scheme."
+    },
+    {
+      "id": "github-app-ftp-scheme",
+      "category": "github-url-canonicalization",
+      "audience": "ftp://github.com/apps/cyspbot",
+      "why": "GitHub App URL with ftp scheme."
     },
     {
       "id": "github-owner-no-scheme-query",
@@ -606,6 +690,24 @@
       "category": "github-git-url",
       "audience": "ssh://git@github.com/cysp/github-actions-id-token-exploration.git",
       "why": "ssh:// Git remote URL for the current repository."
+    },
+    {
+      "id": "ssh-url-current-repo-no-git-suffix",
+      "category": "github-git-url",
+      "audience": "ssh://github.com/cysp/github-actions-id-token-exploration",
+      "why": "ssh:// URL for current repository without userinfo or .git suffix."
+    },
+    {
+      "id": "ssh-url-current-owner",
+      "category": "github-git-url",
+      "audience": "ssh://github.com/cysp",
+      "why": "ssh:// URL for current owner."
+    },
+    {
+      "id": "ssh-url-github-app",
+      "category": "github-git-url",
+      "audience": "ssh://github.com/apps/cyspbot",
+      "why": "ssh:// URL for rejected GitHub Apps path."
     },
     {
       "id": "git-protocol-current-repo",
