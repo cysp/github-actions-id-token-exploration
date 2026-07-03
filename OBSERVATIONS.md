@@ -416,6 +416,13 @@ This is the best model supported by the current evidence:
 10. Treat `toolkit` and `urlsearchparams` as authoritative for literal audience
    values containing `%` or `#`. The `raw` mode is useful only to distinguish URL
    transport decoding behavior.
+11. URL schemes and userinfo do not appear to matter once the suffix beginning
+    at `github.com` is otherwise accepted. Ports and trailing-dot hostnames are
+    not canonicalized into accepted forms.
+12. Percent-encoding characters inside `github.com` hides the substring in
+    toolkit-compatible request modes. Raw mode decodes those values before
+    GitHub sees the audience and can therefore reject values that encoded modes
+    accept.
 
 ## Practical conclusion
 
@@ -552,3 +559,41 @@ Run 8 should test:
   is decoded before matching.
 - Whether SSH-like URLs without a `.git` suffix are accepted when their suffix
   otherwise matches the current owner/repository allowlist.
+
+## Run 8: host canonicalization probes
+
+Commit: `fc43780`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28631604572>
+
+Summary: `21` accepted, `30` rejected.
+
+### High-confidence observations
+
+- Ports are not canonicalized into accepted GitHub forms, even default port 443:
+  - rejected: `https://github.com:443`
+  - rejected: `https://github.com:443/cysp`
+  - rejected: `https://github.com:443/cysp/github-actions-id-token-exploration`
+  - rejected: `https://github.com:8443/cysp/github-actions-id-token-exploration`
+- Userinfo is accepted or rejected according to the same suffix rule:
+  - accepted: `https://token@github.com/cysp`
+  - rejected: `https://token@github.com/apps/cyspbot`
+- Trailing-dot hostnames are rejected:
+  - `https://github.com./cysp`
+  - `https://github.com./apps/cyspbot`
+- Scheme does not appear to matter:
+  - accepted: `ftp://github.com/cysp`
+  - accepted: `ssh://github.com/cysp`
+  - accepted: `ssh://github.com/cysp/github-actions-id-token-exploration`
+  - rejected: `ftp://github.com/apps/cyspbot`
+  - rejected: `ssh://github.com/apps/cyspbot`
+- Percent-encoding characters inside `github.com` prevents the special
+  substring handling in toolkit-compatible request modes:
+  - accepted in encoded modes: `https://gith%75b.com/apps/cyspbot`
+  - accepted in encoded modes: `https://%67ithub.com/apps/cyspbot`
+  - accepted in encoded modes: `gith%75b.com/apps/cyspbot`
+- Raw mode rejected those encoded-host values because the raw request URL lets
+  the query parser decode `%xx` before GitHub sees the audience. Encoded modes
+  are the relevant result for real `@actions/core` usage.
