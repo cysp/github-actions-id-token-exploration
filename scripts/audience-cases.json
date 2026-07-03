@@ -1140,6 +1140,72 @@
       "category": "github-comma-list",
       "audience": "https://github.com/cysp,https://github.com/apps/cyspbot",
       "why": "Comma list containing one accepted and one rejected GitHub URL."
+    },
+    {
+      "id": "unicode-latin",
+      "category": "generic-character-boundary",
+      "audience": "café",
+      "why": "Non-ASCII Latin character."
+    },
+    {
+      "id": "unicode-cjk",
+      "category": "generic-character-boundary",
+      "audience": "対象",
+      "why": "CJK characters."
+    },
+    {
+      "id": "unicode-emoji",
+      "category": "generic-character-boundary",
+      "audience": "audience-😀",
+      "why": "Emoji character."
+    },
+    {
+      "id": "nul-character",
+      "category": "generic-character-boundary",
+      "audience": "before\u0000after",
+      "why": "NUL control character."
+    },
+    {
+      "id": "carriage-return",
+      "category": "generic-character-boundary",
+      "audience": "before\rafter",
+      "why": "Carriage return control character."
+    },
+    {
+      "id": "crlf",
+      "category": "generic-character-boundary",
+      "audience": "before\r\nafter",
+      "why": "CRLF control character sequence."
+    },
+    {
+      "id": "delete-character",
+      "category": "generic-character-boundary",
+      "audience": "before\u007Fafter",
+      "why": "DEL control character."
+    },
+    {
+      "id": "invalid-percent-escape",
+      "category": "generic-character-boundary",
+      "audience": "bad%zzescape",
+      "why": "Invalid percent escape sequence."
+    },
+    {
+      "id": "lone-percent",
+      "category": "generic-character-boundary",
+      "audience": "bad%",
+      "why": "Lone percent character."
+    },
+    {
+      "id": "json-array-no-github",
+      "category": "generic-character-boundary",
+      "audience": "[\"cyspbot\",\"api://cyspbot\"]",
+      "why": "JSON-looking string without github.com."
+    },
+    {
+      "id": "json-object-no-github",
+      "category": "generic-character-boundary",
+      "audience": "{\"aud\":\"cyspbot\"}",
+      "why": "JSON object-looking string without github.com."
     }
   ],
   "generated": [
@@ -1147,7 +1213,7 @@
       "idPrefix": "length-a",
       "category": "length-boundary",
       "char": "a",
-      "lengths": [1, 2, 8, 32, 64, 128, 255, 256, 512, 1024, 2048],
+      "lengths": [1, 2, 8, 32, 64, 128, 255, 256, 512, 1024, 2048, 4096, 8192, 16384],
       "why": "Length boundary using an unreserved character."
     },
     {
@@ -1155,7 +1221,7 @@
       "category": "length-boundary",
       "prefix": "https://example.com/",
       "char": "a",
-      "lengths": [32, 64, 128, 255, 256, 512, 1024, 2048],
+      "lengths": [32, 64, 128, 255, 256, 512, 1024, 2048, 4096, 8192, 16384],
       "why": "Length boundary using URL-shaped values."
     }
   ]

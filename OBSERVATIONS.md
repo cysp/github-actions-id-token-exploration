@@ -597,3 +597,11 @@ Summary: `21` accepted, `30` rejected.
 - Raw mode rejected those encoded-host values because the raw request URL lets
   the query parser decode `%xx` before GitHub sees the audience. Encoded modes
   are the relevant result for real `@actions/core` usage.
+
+## Next probes
+
+Run 9 should test:
+
+- Whether there is a practical maximum audience length above 2048 characters.
+- Whether generic control characters, Unicode, invalid percent escapes, and
+  JSON-looking values are accepted when they do not contain `github.com`.
