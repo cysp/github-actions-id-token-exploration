@@ -483,3 +483,14 @@ Summary: `21` accepted, `39` rejected.
   - `git://github.com/cysp/github-actions-id-token-exploration.git`
   - `git+ssh://git@github.com/cysp/github-actions-id-token-exploration.git`
   - `git@github.com:apps/cyspbot.git`
+
+## Next probes
+
+Run 7 should test:
+
+- Whether percent-encoded owner/repository path characters are normalized before
+  allowlist matching.
+- Whether duplicate slashes and dot segments are normalized before allowlist
+  matching.
+- Whether traversal-like paths under the current repository can escape the
+  accepted repository prefix.

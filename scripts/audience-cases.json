@@ -170,6 +170,66 @@
       "why": ".git path segment below the accepted current repository prefix."
     },
     {
+      "id": "repo-url-encoded-owner-char",
+      "category": "github-path-normalization",
+      "audience": "https://github.com/c%79sp/github-actions-id-token-exploration",
+      "why": "Current owner path with one percent-encoded character."
+    },
+    {
+      "id": "repo-url-encoded-repo-char",
+      "category": "github-path-normalization",
+      "audience": "https://github.com/cysp/github-actions-id-token-%65xploration",
+      "why": "Current repository path with one percent-encoded character."
+    },
+    {
+      "id": "repo-url-encoded-slash-after-owner",
+      "category": "github-path-normalization",
+      "audience": "https://github.com/cysp%2Fgithub-actions-id-token-exploration",
+      "why": "Current owner and repository separated by an encoded slash."
+    },
+    {
+      "id": "repo-url-encoded-slash-after-repo",
+      "category": "github-path-normalization",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration%2Fsettings",
+      "why": "Current repository and subpath separated by an encoded slash."
+    },
+    {
+      "id": "repo-url-double-slash-owner-repo",
+      "category": "github-path-normalization",
+      "audience": "https://github.com/cysp//github-actions-id-token-exploration",
+      "why": "Duplicate slash between current owner and repository."
+    },
+    {
+      "id": "repo-url-dot-segment-before-repo",
+      "category": "github-path-normalization",
+      "audience": "https://github.com/cysp/./github-actions-id-token-exploration",
+      "why": "Dot path segment before current repository."
+    },
+    {
+      "id": "repo-url-dotdot-after-repo",
+      "category": "github-path-normalization",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/../apps/cyspbot",
+      "why": "Traversal-like path from accepted repository prefix to rejected apps path."
+    },
+    {
+      "id": "repo-url-encoded-dotdot-after-repo",
+      "category": "github-path-normalization",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/%2E%2E/apps/cyspbot",
+      "why": "Percent-encoded traversal-like path from accepted repository prefix."
+    },
+    {
+      "id": "repo-url-double-encoded-dotdot-after-repo",
+      "category": "github-path-normalization",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/%252E%252E/apps/cyspbot",
+      "why": "Double-encoded traversal-like path from accepted repository prefix."
+    },
+    {
+      "id": "repo-url-dotdot-before-owner",
+      "category": "github-path-normalization",
+      "audience": "https://github.com/cysp/../apps/cyspbot",
+      "why": "Traversal-like path from accepted owner prefix to rejected apps path."
+    },
+    {
       "id": "repo-url-git-suffix",
       "category": "github-repo",
       "audience": "https://github.com/cysp/github-actions-id-token-exploration.git",
