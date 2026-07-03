@@ -64,9 +64,9 @@ cases:
   boundary variants, and length boundaries
 
 The harness supports three request-construction modes. The broad, focused,
-reusable, self-hosted, and single-audience workflows use all three by default;
-the permission-control workflow uses the default toolkit-compatible mode because
-it is checking permission behavior rather than encoding behavior.
+reusable, targeted, and single-audience workflows use all three by default; the
+permission-control workflow uses the default toolkit-compatible mode because it
+is checking permission behavior rather than encoding behavior.
 
 - `toolkit`: matches the current `@actions/core` implementation by appending
   `encodeURIComponent(audience)` to `ACTIONS_ID_TOKEN_REQUEST_URL`
@@ -89,8 +89,6 @@ it is checking permission behavior rather than encoding behavior.
   check whether the same audience behavior appears inside a reusable workflow.
 - `oidc-audience-single.yml` tests one arbitrary audience value supplied at
   dispatch time.
-- `oidc-audience-self-hosted.yml` is an opt-in workflow for a registered
-  self-hosted runner.
 
 Each workflow writes a Markdown job summary and, where artifact upload is
 available, JSON and CSV result files.
@@ -110,6 +108,4 @@ environment variables. A local emulator can validate workflow syntax and script
 control flow, but it cannot prove GitHub's issuer-side audience allow/deny
 rules unless it is connected to the real GitHub Actions service.
 
-The official self-hosted runner can test the real service once it is registered
-to this repository, because jobs still obtain OIDC tokens from GitHub. Use the
-`OIDC audience self-hosted` workflow for that path.
+This repository keeps its experimental workflows on GitHub-hosted Linux runners.
