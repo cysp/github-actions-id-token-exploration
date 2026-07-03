@@ -413,13 +413,17 @@ This is the best model supported by the current evidence:
    - `github.com/cysp/github-actions-id-token-exploration`
    - `github.com/cysp/github-actions-id-token-exploration/`
    - paths under `github.com/cysp/github-actions-id-token-exploration/`
+   GitHub root and current-owner suffixes are exact endpoint forms; unlike the
+   current-repository prefix, they do not accept arbitrary slash-prefixed
+   subpaths.
 4. The suffix must consume the rest of the audience, except that normal URL
    query/fragment syntax is accepted under the current repository prefix.
    Query/fragment after GitHub root or current-owner suffixes is rejected even
    with an explicit trailing slash. Query/fragment at the repository root is
    accepted with a trailing slash before the delimiter and rejected without that
-   slash. Other punctuation or whitespace immediately after the current
-   repository name is rejected unless there is a slash before it.
+   slash. Punctuation or whitespace immediately after root, current owner, or
+   current repository accepted suffixes is rejected unless the suffix is already
+   under the current repository path with a slash before the extra text.
 5. The top-level GitHub App URL `github.com/apps/cyspbot` is outside the
    allowlist and is rejected in every tested form.
 6. The issuer's validation is substring-oriented enough that these non-GitHub
@@ -898,3 +902,50 @@ Run 14 should test:
   `github.com/cysp` is rejected.
 - Whether slash-prefixed punctuation or whitespace after root or owner remains
   rejected rather than becoming an accepted subpath.
+
+## Run 14: root and owner suffix boundaries
+
+Commit: `2f6c23c`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28640606521>
+
+Summary: `2` accepted, `49` rejected. The two accepted rows were raw-mode
+semicolon transport artifacts; all toolkit-compatible mode requests were
+rejected.
+
+### High-confidence observations
+
+- Punctuation or whitespace immediately after GitHub root was rejected:
+  - `https://github.com.`
+  - `https://github.com-extra`
+  - `https://github.com extra`
+  - `https://github.com\nextra`
+- Slash-prefixed extra text after GitHub root was rejected:
+  - `https://github.com/.`
+  - `https://github.com/ extra`
+- Punctuation or whitespace immediately after the current owner was rejected:
+  - `https://github.com/cysp.`
+  - `https://github.com/cysp-extra`
+  - `https://github.com/cysp_extra`
+  - `https://github.com/cysp:extra`
+  - `https://github.com/cysp;param=1`
+  - `https://github.com/cysp@main`
+  - `https://github.com/cysp extra`
+  - `https://github.com/cysp\nextra`
+- Slash-prefixed extra text after the current owner was rejected:
+  - `https://github.com/cysp/.`
+  - `https://github.com/cysp/;param=1`
+  - `https://github.com/cysp/ extra`
+- Raw mode accepted the semicolon-containing current-owner cases by returning
+  an `aud` of `https://github.com/cysp`, not the literal audience requested by
+  toolkit-compatible modes.
+
+### Interpretation
+
+The accepted GitHub root and current-owner suffixes are exact endpoint forms.
+They do not behave like the current repository prefix: adding a slash and extra
+path-looking text after root or owner remains rejected. This further narrows the
+allowlist shape to exact root, exact owner, exact repository, and arbitrary
+paths only under the current repository prefix.
