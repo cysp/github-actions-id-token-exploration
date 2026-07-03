@@ -410,6 +410,12 @@ This is the best model supported by the current evidence:
    contains `github.com`.
 8. Git remote syntaxes are rejected; use HTTPS-style current owner/repository
    forms if a GitHub repository URL audience is needed.
+9. The issuer appears to apply prefix-style string matching to paths below the
+   current repository. It does not normalize `..` segments out of accepted
+   repository subpaths before issuance.
+10. Treat `toolkit` and `urlsearchparams` as authoritative for literal audience
+   values containing `%` or `#`. The `raw` mode is useful only to distinguish URL
+   transport decoding behavior.
 
 ## Practical conclusion
 
@@ -494,3 +500,44 @@ Run 7 should test:
   matching.
 - Whether traversal-like paths under the current repository can escape the
   accepted repository prefix.
+
+## Run 7: path normalization probes
+
+Commit: `17c1144`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28631316360>
+
+Summary: `13` accepted, `17` rejected.
+
+### High-confidence observations
+
+- Literal percent-encoded owner/repository path characters are rejected in
+  `toolkit` and `urlsearchparams` modes:
+  - `https://github.com/c%79sp/github-actions-id-token-exploration`
+  - `https://github.com/cysp/github-actions-id-token-%65xploration`
+  - `https://github.com/cysp%2Fgithub-actions-id-token-exploration`
+  - `https://github.com/cysp/github-actions-id-token-exploration%2Fsettings`
+- The same percent-encoded values were accepted in `raw` mode because the raw
+  request URL lets the query parser decode `%xx` before GitHub sees the audience
+  string. For actual action/toolkit behavior, use the encoded modes as the
+  authoritative result.
+- Duplicate slash and dot segment before the repository name are rejected:
+  - `https://github.com/cysp//github-actions-id-token-exploration`
+  - `https://github.com/cysp/./github-actions-id-token-exploration`
+- Traversal-like paths below the accepted current repository prefix are accepted:
+  - `https://github.com/cysp/github-actions-id-token-exploration/../apps/cyspbot`
+  - `https://github.com/cysp/github-actions-id-token-exploration/%2E%2E/apps/cyspbot`
+  - `https://github.com/cysp/github-actions-id-token-exploration/%252E%252E/apps/cyspbot`
+- Traversal-like path below only the owner prefix is rejected:
+  - `https://github.com/cysp/../apps/cyspbot`
+
+### Interpretation
+
+The allowlist appears to be string/prefix based, not URL-normalization based.
+Once the audience suffix is under the accepted current repository prefix,
+additional path text is accepted even if a URL parser might later interpret that
+text as a traversal. Relying parties should compare the `aud` value as an exact
+string or with their own explicit canonicalization rules, not by normalizing it
+as a URL after issuance.
