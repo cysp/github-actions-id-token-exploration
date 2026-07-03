@@ -949,3 +949,14 @@ They do not behave like the current repository prefix: adding a slash and extra
 path-looking text after root or owner remains rejected. This further narrows the
 allowlist shape to exact root, exact owner, exact repository, and arbitrary
 paths only under the current repository prefix.
+
+## Next probes
+
+Run 15 should test:
+
+- Whether omitting the audience parameter differs from sending an explicit empty
+  audience value.
+- Whether whitespace-only and control-only audiences are accepted as literal
+  custom audience values.
+- Whether these boundary values behave consistently across toolkit-compatible
+  request construction modes and raw mode.

@@ -992,6 +992,42 @@
       "why": "Newline character."
     },
     {
+      "id": "space-only",
+      "category": "empty-whitespace-boundary",
+      "audience": " ",
+      "why": "Audience consisting only of a single space."
+    },
+    {
+      "id": "spaces-only",
+      "category": "empty-whitespace-boundary",
+      "audience": "   ",
+      "why": "Audience consisting only of spaces."
+    },
+    {
+      "id": "tab-only",
+      "category": "empty-whitespace-boundary",
+      "audience": "\t",
+      "why": "Audience consisting only of a tab."
+    },
+    {
+      "id": "newline-only",
+      "category": "empty-whitespace-boundary",
+      "audience": "\n",
+      "why": "Audience consisting only of a newline."
+    },
+    {
+      "id": "crlf-only",
+      "category": "empty-whitespace-boundary",
+      "audience": "\r\n",
+      "why": "Audience consisting only of CRLF."
+    },
+    {
+      "id": "nul-only",
+      "category": "empty-whitespace-boundary",
+      "audience": "\u0000",
+      "why": "Audience consisting only of NUL."
+    },
+    {
       "id": "reserved-query-chars",
       "category": "character-boundary",
       "audience": "value?with=query&and=equals",
