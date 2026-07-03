@@ -418,7 +418,8 @@ This is the best model supported by the current evidence:
    Query/fragment after GitHub root or current-owner suffixes is rejected even
    with an explicit trailing slash. Query/fragment at the repository root is
    accepted with a trailing slash before the delimiter and rejected without that
-   slash.
+   slash. Other punctuation or whitespace immediately after the current
+   repository name is rejected unless there is a slash before it.
 5. The top-level GitHub App URL `github.com/apps/cyspbot` is outside the
    allowlist and is rejected in every tested form.
 6. The issuer's validation is substring-oriented enough that these non-GitHub
@@ -440,7 +441,9 @@ This is the best model supported by the current evidence:
    accepted current-repository subpath.
 10. Treat `toolkit` and `urlsearchparams` as authoritative for literal audience
    values containing `%` or `#`. The `raw` mode is useful only to distinguish URL
-   transport decoding behavior.
+   transport decoding behavior. Run 13 also showed raw-mode semicolon behavior
+   that can alter the value GitHub receives, so encoded modes are authoritative
+   for literal `;` values too.
 11. URL schemes and userinfo do not appear to matter once the suffix beginning
     at `github.com` is otherwise accepted. Ports and trailing-dot hostnames are
     not canonicalized into accepted forms.
@@ -842,3 +845,45 @@ Run 13 should test:
   name is rejected when there is no path slash.
 - Whether slash-prefixed punctuation or whitespace remains accepted because it
   is under the current repository path prefix.
+
+## Run 13: current repository suffix boundaries
+
+Commit: `7b3d186`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28635330282>
+
+Summary: `10` accepted, `23` rejected.
+
+### High-confidence observations
+
+- Punctuation or whitespace immediately after the current repository name was
+  rejected in toolkit-compatible modes when there was no slash before it:
+  - `https://github.com/cysp/github-actions-id-token-exploration.`
+  - `https://github.com/cysp/github-actions-id-token-exploration-extra`
+  - `https://github.com/cysp/github-actions-id-token-exploration_extra`
+  - `https://github.com/cysp/github-actions-id-token-exploration:extra`
+  - `https://github.com/cysp/github-actions-id-token-exploration;param=1`
+  - `https://github.com/cysp/github-actions-id-token-exploration@main`
+  - `https://github.com/cysp/github-actions-id-token-exploration extra`
+  - `https://github.com/cysp/github-actions-id-token-exploration\nextra`
+- Slash-prefixed text under the current repository path was accepted:
+  - `https://github.com/cysp/github-actions-id-token-exploration/.`
+  - `https://github.com/cysp/github-actions-id-token-exploration/;param=1`
+  - `https://github.com/cysp/github-actions-id-token-exploration/ extra`
+- Raw mode produced transport artifacts for semicolon-containing values. For
+  example, raw mode for
+  `https://github.com/cysp/github-actions-id-token-exploration;param=1`
+  returned an `aud` of `https://github.com/cysp`, which is not the literal value
+  requested by toolkit-compatible modes. Treat toolkit and `urlsearchparams` as
+  authoritative for literal semicolon-containing audiences.
+
+### Interpretation
+
+The accepted current repository suffix ends at the exact repository name, a
+slash, or a repository-root trailing slash before query/fragment. The issuer
+does not treat arbitrary punctuation or whitespace after the repository name as
+a path boundary. Once a slash appears after the repository name, the issuer
+continues to accept arbitrary subpath-looking text, including punctuation and
+spaces.
