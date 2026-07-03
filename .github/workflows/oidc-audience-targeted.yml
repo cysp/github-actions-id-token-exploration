@@ -35,7 +35,7 @@ jobs:
           CASE_REGEX_INPUT: ${{ github.event.inputs.case_regex }}
           REQUEST_MODES: ${{ github.event.inputs.modes || 'toolkit,urlsearchparams,raw' }}
         run: |
-          DEFAULT_CASE_REGEX="^(repo-url-query|repo-url-fragment|repo-url-path-query|repo-url-git-segment|github-api-root|github-api-root-slash|github-api-current-repo|github-com-suffix-domain-root|github-com-suffix-domain-other-path|github-com-suffix-domain-current-owner|github-com-prefix-domain-apps|github-com-dot-au-apps|github-com-typo-apps|github-com-subdomain-apps|githubusercontent-apps|plain-scheme-less-app-url-substring|encoded-app-url-substring|safe-github-com-substring|safe-current-repo-substring)$"
+          DEFAULT_CASE_REGEX="^(github-root-no-scheme|github-root-no-scheme-slash|github-owner-no-scheme|github-current-repo-no-scheme|prefix-github-root-no-scheme|repo-url-trailing-slash-query|repo-url-tree-query|repo-url-issues-fragment|notgithub-com-root|notgithub-com-other-path|notgithub-com-current-owner|mygithub-org-apps|github-com-in-path|github-com-in-query|parenthesized-current-repo-url|comma-current-repo-url)$"
           CASE_REGEX="${CASE_REGEX_INPUT:-$DEFAULT_CASE_REGEX}"
           node scripts/run-audience-matrix.mjs \
             --outputDir oidc-audience-results-targeted \

@@ -146,6 +146,24 @@
       "why": "Accepted current repository path with query string."
     },
     {
+      "id": "repo-url-trailing-slash-query",
+      "category": "github-current-repo-query",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/?tab=readme",
+      "why": "Current repository URL with trailing slash and query string."
+    },
+    {
+      "id": "repo-url-tree-query",
+      "category": "github-current-repo-query",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/tree/main?plain=1",
+      "why": "Current repository tree path with query string."
+    },
+    {
+      "id": "repo-url-issues-fragment",
+      "category": "github-current-repo-query",
+      "audience": "https://github.com/cysp/github-actions-id-token-exploration/issues#created-by-me",
+      "why": "Current repository issues path with fragment."
+    },
+    {
       "id": "repo-url-git-segment",
       "category": "github-current-repo-path",
       "audience": "https://github.com/cysp/github-actions-id-token-exploration/.git",
@@ -168,6 +186,36 @@
       "category": "github-url",
       "audience": "https://github.com/",
       "why": "GitHub host root URL."
+    },
+    {
+      "id": "github-root-no-scheme",
+      "category": "github-bare-substring",
+      "audience": "github.com",
+      "why": "Bare github.com without scheme."
+    },
+    {
+      "id": "github-root-no-scheme-slash",
+      "category": "github-bare-substring",
+      "audience": "github.com/",
+      "why": "Bare github.com with slash and no scheme."
+    },
+    {
+      "id": "github-owner-no-scheme",
+      "category": "github-bare-substring",
+      "audience": "github.com/cysp",
+      "why": "Bare current owner URL without scheme."
+    },
+    {
+      "id": "github-current-repo-no-scheme",
+      "category": "github-bare-substring",
+      "audience": "github.com/cysp/github-actions-id-token-exploration",
+      "why": "Bare current repository URL without scheme."
+    },
+    {
+      "id": "prefix-github-root-no-scheme",
+      "category": "github-bare-substring",
+      "audience": "prefix github.com suffix",
+      "why": "Bare github.com embedded in a larger string."
     },
     {
       "id": "github-apps-root",
@@ -458,6 +506,42 @@
       "why": "Domain ends with github.com characters but is not github.com."
     },
     {
+      "id": "notgithub-com-root",
+      "category": "host-boundary",
+      "audience": "https://notgithub.com",
+      "why": "Domain containing github.com as a substring without apps path."
+    },
+    {
+      "id": "notgithub-com-other-path",
+      "category": "host-boundary",
+      "audience": "https://notgithub.com/other",
+      "why": "Domain containing github.com with a non-app path."
+    },
+    {
+      "id": "notgithub-com-current-owner",
+      "category": "host-boundary",
+      "audience": "https://notgithub.com/cysp",
+      "why": "Domain containing github.com with current owner path."
+    },
+    {
+      "id": "mygithub-org-apps",
+      "category": "host-boundary",
+      "audience": "https://mygithub.org/apps/cyspbot",
+      "why": "Domain containing github but not github.com."
+    },
+    {
+      "id": "github-com-in-path",
+      "category": "host-boundary",
+      "audience": "https://example.com/github.com/apps/cyspbot",
+      "why": "github.com substring appears in path, not host."
+    },
+    {
+      "id": "github-com-in-query",
+      "category": "host-boundary",
+      "audience": "https://example.com/path?next=https://github.com/apps/cyspbot",
+      "why": "github.com substring appears in query string."
+    },
+    {
       "id": "github-com-dot-au-apps",
       "category": "host-boundary",
       "audience": "https://github.com.au/apps/cyspbot",
@@ -690,6 +774,18 @@
       "category": "github-app-substring",
       "audience": "prefix https://github.com/cysp/github-actions-id-token-exploration suffix",
       "why": "Accepted current repository URL embedded in a larger string."
+    },
+    {
+      "id": "parenthesized-current-repo-url",
+      "category": "github-app-substring",
+      "audience": "(https://github.com/cysp/github-actions-id-token-exploration)",
+      "why": "Accepted current repository URL embedded in parentheses."
+    },
+    {
+      "id": "comma-current-repo-url",
+      "category": "github-app-substring",
+      "audience": "cyspbot,https://github.com/cysp/github-actions-id-token-exploration",
+      "why": "Accepted current repository URL embedded after a comma."
     }
   ],
   "generated": [

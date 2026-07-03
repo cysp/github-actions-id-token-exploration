@@ -199,3 +199,73 @@ Run 3 should test:
 - Whether current repository paths with a `.git` segment under the accepted repo
   prefix are accepted.
 - Whether `api.github.com` rejection is host-specific or path-specific.
+
+## Run 3: host-boundary and query probes
+
+Commit: `9190cd1`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28630633476>
+
+Summary: `16` accepted, `41` rejected.
+
+### High-confidence observations
+
+- `api.github.com` root is accepted, but API resource paths are rejected:
+  - accepted: `https://api.github.com`
+  - accepted: `https://api.github.com/`
+  - rejected: `https://api.github.com/repos/cysp/github-actions-id-token-exploration`
+- The issuer appears to treat `github.com` as a special substring, not just as a
+  URL hostname. These were rejected:
+  - `https://github.com.example.com`
+  - `https://github.com.example.com/other`
+  - `https://github.com.example.com/cysp`
+  - `https://notgithub.com/apps/cyspbot`
+  - `https://github.com.au/apps/cyspbot`
+  - `https://github.comm/apps/cyspbot`
+  - `https://foo.github.com/apps/cyspbot`
+- A GitHub-owned domain that does not contain the literal substring
+  `github.com` was accepted:
+  - `https://raw.githubusercontent.com/apps/cyspbot`
+- Current repository query and fragment handling is mixed:
+  - rejected: `https://github.com/cysp/github-actions-id-token-exploration?tab=readme`
+  - rejected in encoded modes: `https://github.com/cysp/github-actions-id-token-exploration#readme`
+  - accepted: `https://github.com/cysp/github-actions-id-token-exploration/issues?q=is%3Aissue`
+  - accepted: `https://github.com/cysp/github-actions-id-token-exploration/.git`
+- Raw mode accepted the fragment case because an unencoded `#` is interpreted as
+  a URL fragment in the request URL and is not sent as part of the `audience`
+  query parameter. Treat `toolkit` and `urlsearchparams` as authoritative for
+  literal audience values containing `#`.
+- Embedding otherwise accepted GitHub URLs in a larger string caused rejection:
+  - `prefix https://github.com/cysp suffix`
+  - `prefix https://github.com/cysp/github-actions-id-token-exploration suffix`
+
+## Refined hypotheses after run 3
+
+1. If the audience contains the literal substring `github.com`, GitHub applies a
+   special allowlist rather than treating it as an arbitrary string.
+2. Accepted `github.com` forms currently observed are:
+   - `https://github.com`
+   - `https://github.com/`
+   - the current owner URL with optional trailing slash and scheme/host case
+     variation
+   - the current repository URL and arbitrary subpaths under it
+3. The accepted `github.com` form probably must be the whole audience value.
+   Adding prefix/suffix text causes rejection.
+4. Query strings at the current repository root are rejected, while query strings
+   below a current-repository subpath may be accepted. This needs a smaller
+   follow-up set.
+5. `api.github.com` root is allowed, while API resource paths are not.
+
+## Next probes
+
+Run 4 should test:
+
+- Bare `github.com` values without a scheme.
+- `github.com` substring values without `/apps/cyspbot`.
+- Domains that contain `github.com` as text but are otherwise unrelated.
+- Query and fragment behavior at current repository root, trailing slash, and
+  subpaths.
+- Whether the current repository URL can be embedded with punctuation that might
+  be parsed as a delimiter.
