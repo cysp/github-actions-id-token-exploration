@@ -414,9 +414,11 @@ This is the best model supported by the current evidence:
    - `github.com/cysp/github-actions-id-token-exploration/`
    - paths under `github.com/cysp/github-actions-id-token-exploration/`
 4. The suffix must consume the rest of the audience, except that normal URL
-   query/fragment syntax is accepted under subpaths of the current repository.
-   Query at the repository root without a trailing slash is rejected, while
-   `...?` under a subpath and `.../?` at the root are accepted.
+   query/fragment syntax is accepted under the current repository prefix.
+   Query/fragment after GitHub root or current-owner suffixes is rejected even
+   with an explicit trailing slash. Query/fragment at the repository root is
+   accepted with a trailing slash before the delimiter and rejected without that
+   slash.
 5. The top-level GitHub App URL `github.com/apps/cyspbot` is outside the
    allowlist and is rejected in every tested form.
 6. The issuer's validation is substring-oriented enough that these non-GitHub
@@ -736,3 +738,53 @@ Run 11 should test:
 - Whether a trailing slash before query/fragment changes the already rejected
   GitHub App URL family.
 - Whether owner child paths remain rejected even when followed by query text.
+
+## Run 11: query and fragment boundaries
+
+Commit: `2f8e8aa`
+
+Run:
+
+- `OIDC audience targeted`: <https://github.com/cysp/github-actions-id-token-exploration/actions/runs/28632399276>
+
+Summary: `13` accepted, `32` rejected.
+
+### High-confidence observations
+
+- GitHub root query/fragment forms were rejected in the toolkit-compatible
+  modes even with an explicit slash before the delimiter:
+  - `https://github.com/?x=1`
+  - `https://github.com/#fragment`
+  - `github.com/?x=1`
+  - `github.com/#fragment`
+- Current-owner query/fragment forms were rejected in the toolkit-compatible
+  modes even with an explicit slash before the delimiter:
+  - `https://github.com/cysp/?tab=repositories`
+  - `https://github.com/cysp/#profile`
+  - `github.com/cysp/?tab=repositories`
+  - `github.com/cysp/#profile`
+- Current-repository query/fragment forms with a trailing slash were accepted:
+  - `https://github.com/cysp/github-actions-id-token-exploration/#readme`
+  - `github.com/cysp/github-actions-id-token-exploration/?tab=readme`
+  - `github.com/cysp/github-actions-id-token-exploration/#readme`
+- Adding a trailing slash before query/fragment did not make GitHub App URLs
+  acceptable:
+  - `https://github.com/apps/cyspbot/?installation_id=1`
+  - `https://github.com/apps/cyspbot/#oidc`
+- Current-owner child paths remain rejected, including with a slash before query
+  text:
+  - `https://github.com/cysp/actions?x=1`
+  - `https://github.com/cysp/actions/?x=1`
+- Raw mode accepted some `#fragment` cases because an unencoded fragment is not
+  sent to the server as part of the HTTP request URL. For example, raw mode for
+  `https://github.com/cysp/#profile` returned an `aud` of
+  `https://github.com/cysp/`. Treat toolkit and `urlsearchparams` as the
+  authoritative results for literal fragment-containing audiences.
+
+### Interpretation
+
+The query/fragment exception is tied to the current repository prefix, not to
+all accepted GitHub suffixes. GitHub root and current-owner audiences must end
+exactly at the accepted suffix or trailing slash. The current repository accepts
+query/fragment text only when the suffix has a path boundary before the
+delimiter, such as the repository trailing slash or a subpath.
