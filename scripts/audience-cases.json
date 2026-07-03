@@ -1382,6 +1382,108 @@
       "why": "Current repository suffix followed by slash, space, and more text."
     },
     {
+      "id": "root-suffix-dot",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com.",
+      "why": "GitHub root suffix followed immediately by a dot."
+    },
+    {
+      "id": "root-suffix-dash",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com-extra",
+      "why": "GitHub root suffix followed immediately by dash and more text."
+    },
+    {
+      "id": "root-suffix-space",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com extra",
+      "why": "GitHub root suffix followed immediately by a space and more text."
+    },
+    {
+      "id": "root-suffix-newline",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com\nextra",
+      "why": "GitHub root suffix followed immediately by a newline and more text."
+    },
+    {
+      "id": "root-suffix-slash-dot",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/.",
+      "why": "GitHub root slash followed by dot path segment."
+    },
+    {
+      "id": "root-suffix-slash-space",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/ extra",
+      "why": "GitHub root slash followed by space and more text."
+    },
+    {
+      "id": "owner-suffix-dot",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/cysp.",
+      "why": "Current owner suffix followed immediately by a dot."
+    },
+    {
+      "id": "owner-suffix-dash",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/cysp-extra",
+      "why": "Current owner suffix followed immediately by dash and more text."
+    },
+    {
+      "id": "owner-suffix-underscore",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/cysp_extra",
+      "why": "Current owner suffix followed immediately by underscore and more text."
+    },
+    {
+      "id": "owner-suffix-colon",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/cysp:extra",
+      "why": "Current owner suffix followed immediately by a colon."
+    },
+    {
+      "id": "owner-suffix-semicolon",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/cysp;param=1",
+      "why": "Current owner suffix followed immediately by a semicolon path-parameter style value."
+    },
+    {
+      "id": "owner-suffix-at",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/cysp@main",
+      "why": "Current owner suffix followed immediately by at-sign and more text."
+    },
+    {
+      "id": "owner-suffix-space",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/cysp extra",
+      "why": "Current owner suffix followed immediately by a space and more text."
+    },
+    {
+      "id": "owner-suffix-newline",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/cysp\nextra",
+      "why": "Current owner suffix followed immediately by a newline and more text."
+    },
+    {
+      "id": "owner-suffix-slash-dot",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/cysp/.",
+      "why": "Current owner slash followed by dot path segment."
+    },
+    {
+      "id": "owner-suffix-slash-semicolon",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/cysp/;param=1",
+      "why": "Current owner slash followed by semicolon path-parameter style value."
+    },
+    {
+      "id": "owner-suffix-slash-space",
+      "category": "github-root-owner-suffix-boundary",
+      "audience": "https://github.com/cysp/ extra",
+      "why": "Current owner slash followed by space and more text."
+    },
+    {
       "id": "unicode-latin",
       "category": "generic-character-boundary",
       "audience": "café",

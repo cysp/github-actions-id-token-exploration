@@ -887,3 +887,14 @@ does not treat arbitrary punctuation or whitespace after the repository name as
 a path boundary. Once a slash appears after the repository name, the issuer
 continues to accept arbitrary subpath-looking text, including punctuation and
 spaces.
+
+## Next probes
+
+Run 14 should test:
+
+- Whether accepted GitHub root and current-owner suffixes are exact endpoints,
+  unlike the current repository prefix.
+- Whether punctuation or whitespace immediately after `github.com` or
+  `github.com/cysp` is rejected.
+- Whether slash-prefixed punctuation or whitespace after root or owner remains
+  rejected rather than becoming an accepted subpath.

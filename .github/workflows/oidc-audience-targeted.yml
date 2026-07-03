@@ -35,7 +35,7 @@ jobs:
           CASE_REGEX_INPUT: ${{ github.event.inputs.case_regex }}
           REQUEST_MODES: ${{ github.event.inputs.modes || 'toolkit,urlsearchparams,raw' }}
         run: |
-          DEFAULT_CASE_REGEX="^(repo-suffix-dot|repo-suffix-dash|repo-suffix-underscore|repo-suffix-colon|repo-suffix-semicolon|repo-suffix-at|repo-suffix-space|repo-suffix-newline|repo-suffix-slash-dot|repo-suffix-slash-semicolon|repo-suffix-slash-space)$"
+          DEFAULT_CASE_REGEX="^(root-suffix-dot|root-suffix-dash|root-suffix-space|root-suffix-newline|root-suffix-slash-dot|root-suffix-slash-space|owner-suffix-dot|owner-suffix-dash|owner-suffix-underscore|owner-suffix-colon|owner-suffix-semicolon|owner-suffix-at|owner-suffix-space|owner-suffix-newline|owner-suffix-slash-dot|owner-suffix-slash-semicolon|owner-suffix-slash-space)$"
           CASE_REGEX="${CASE_REGEX_INPUT:-$DEFAULT_CASE_REGEX}"
           node scripts/run-audience-matrix.mjs \
             --outputDir oidc-audience-results-targeted \
